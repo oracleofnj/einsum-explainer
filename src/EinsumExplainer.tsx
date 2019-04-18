@@ -1,6 +1,7 @@
-import React, { useState, ChangeEvent, FormEvent } from "react";
-import { validateAsJson } from "./pkg/einsum.js";
+import React, { ChangeEvent, FormEvent, useState } from "react";
 import ExplainerOutput from "./ExplainerOutput";
+import { isValidationResult } from "./einsum_typeguards";
+import { validateAsJson } from "./pkg/einsum.js";
 
 const EinsumExplainer = () => {
   const [einsumString, setEinsumString] = useState("ij,jk->ik");
@@ -9,7 +10,13 @@ const EinsumExplainer = () => {
     setEinsumString(e.target.value);
   };
 
-  const einsumExplanation = JSON.parse(validateAsJson(einsumString));
+  let einsumExplanation: ValidationResult;
+  const anyEinsumExplanation = JSON.parse(validateAsJson(einsumString));
+  if (isValidationResult(anyEinsumExplanation)) {
+    einsumExplanation = anyEinsumExplanation;
+  } else {
+    einsumExplanation = { Err: "validateAsJson returned an invalid response" };
+  }
 
   return (
     <>

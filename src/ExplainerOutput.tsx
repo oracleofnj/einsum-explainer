@@ -1,13 +1,16 @@
-import React from "react";
 import katex from "katex";
-import makeLatexString from "./makeLatexString";
-import { Contraction } from "./einsum_types";
 import "katex/dist/katex.min.css";
+import React from "react";
+import { isErrorMessage } from "./einsum_typeguards";
+import makeLatexString from "./makeLatexString";
 
-type Explanation = { explanation: any };
+declare type ExplainerOutputProps = {
+  explanation: ValidationResult;
+};
 
-const ExplainerOutput = ({ explanation }: Explanation) => {
-  if (explanation.hasOwnProperty("Err")) {
+const ExplainerOutput = (props: ExplainerOutputProps) => {
+  const { explanation } = props;
+  if (isErrorMessage(explanation)) {
     const errorMessage = explanation.Err;
     return (
       <>
@@ -21,12 +24,10 @@ const ExplainerOutput = ({ explanation }: Explanation) => {
     const dangerousKatexHTML = {
       __html: katex.renderToString(latexString)
     };
-    console.log(dangerousKatexHTML);
 
     return (
       <>
         <p>Everything is cool!</p>
-        {/* <p>Latex String:{latexString}</p> */}
         <div dangerouslySetInnerHTML={dangerousKatexHTML} />
       </>
     );
