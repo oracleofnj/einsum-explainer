@@ -8,8 +8,22 @@ declare type ErrorMessage = {
   Err: string;
 };
 
-declare type Success = {
+declare type ContractionSuccess = {
   Ok: Contraction;
 };
 
-declare type ValidationResult = Success | ErrorMessage;
+declare type OutputSize = number[];
+
+declare type SizedContraction = {
+  contraction: Contraction;
+  output_size: OutputSize;
+};
+
+declare type SizedContractionSuccess = {
+  Ok: SizedContraction;
+};
+
+declare type ContractionValidationResult = ContractionSuccess | ErrorMessage;
+declare type SizedContractionValidationResult =
+  | SizedContractionSuccess
+  | ErrorMessage;

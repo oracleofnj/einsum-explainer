@@ -1,11 +1,11 @@
-import katex from "katex";
+import { renderToString } from "katex";
 import "katex/dist/katex.min.css";
 import React from "react";
 import { isErrorMessage } from "./einsum_typeguards";
 import makeLatexString from "./makeLatexString";
 
 declare type ExplainerOutputProps = {
-  explanation: ValidationResult;
+  explanation: SizedContractionValidationResult;
 };
 
 const ExplainerOutput = (props: ExplainerOutputProps) => {
@@ -19,16 +19,18 @@ const ExplainerOutput = (props: ExplainerOutputProps) => {
       </>
     );
   } else {
-    const contraction: Contraction = explanation.Ok;
+    const sizedValidationResult = explanation.Ok;
+    const { contraction, output_size } = sizedValidationResult;
     const latexString = makeLatexString(contraction);
     const dangerousKatexHTML = {
-      __html: katex.renderToString(latexString)
+      __html: renderToString(latexString)
     };
 
     return (
       <>
         <p>Everything is cool!</p>
         <div dangerouslySetInnerHTML={dangerousKatexHTML} />
+        <p>{JSON.stringify(output_size)}</p>
       </>
     );
   }

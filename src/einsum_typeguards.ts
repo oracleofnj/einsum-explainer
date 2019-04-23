@@ -1,21 +1,65 @@
-function isErrorMessage(r: ValidationResult): r is ErrorMessage {
-  return r.hasOwnProperty("Err");
+function isErrorMessage(r: any): r is ErrorMessage {
+  return (r as object).hasOwnProperty("Err");
 }
 
-function isContraction(r: ValidationResult): r is Success {
+function isContraction(r: object): r is Contraction {
+  return (
+    r.hasOwnProperty("operand_indices") &&
+    (r as Contraction).operand_indices instanceof Array &&
+    r.hasOwnProperty("output_indices") &&
+    r.hasOwnProperty("summation_indices")
+  );
+}
+
+function isContractionSuccess(
+  r: ContractionValidationResult
+): r is ContractionSuccess {
+  return r.hasOwnProperty("Ok") && isContraction((r as ContractionSuccess).Ok);
+}
+
+function isContractionValidationResult(
+  r: any
+): r is ContractionValidationResult {
+  return (
+    isErrorMessage(r as ContractionValidationResult) ||
+    isContractionSuccess(r as ContractionValidationResult)
+  );
+}
+
+function isOutputSize(r: any): r is OutputSize {
+  if (!(r instanceof Array)) {
+    return false;
+  }
+  return r.every((x: any) => typeof x === "number");
+}
+
+function isSizedContraction(r: object): r is SizedContraction {
+  return (
+    r.hasOwnProperty("contraction") &&
+    isContraction((r as SizedContraction).contraction) &&
+    r.hasOwnProperty("output_size") &&
+    isOutputSize((r as SizedContraction).output_size)
+  );
+}
+
+function isSizedContractionSuccess(r: object): r is SizedContractionSuccess {
   return (
     r.hasOwnProperty("Ok") &&
-    (r as Success).Ok.hasOwnProperty("operand_indices") &&
-    (r as Success).Ok.hasOwnProperty("output_indices") &&
-    (r as Success).Ok.hasOwnProperty("summation_indices")
+    isSizedContraction((r as SizedContractionSuccess).Ok)
   );
 }
 
-function isValidationResult(r: any): r is ValidationResult {
+function isSizedContractionValidationResult(
+  r: any
+): r is SizedContractionValidationResult {
   return (
-    isErrorMessage(r as ValidationResult) ||
-    isContraction(r as ValidationResult)
+    isErrorMessage(r) ||
+    isSizedContractionSuccess(r as SizedContractionValidationResult)
   );
 }
 
-export { isErrorMessage, isValidationResult };
+export {
+  isErrorMessage,
+  isContractionValidationResult,
+  isSizedContractionValidationResult
+};
