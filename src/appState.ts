@@ -1,8 +1,6 @@
-import updateEquationDuck, {
-  UpdateEquationAction
-} from "./ducks/updateEquation";
+import updateEquationDuck, { UpdateEquationAction } from "./ducks/updateEquation";
 import updateShapeDuck, { UpdateShapeAction } from "./ducks/updateShape";
-import { makeReducer, Duck } from "./makeReducer";
+import { makeReducer } from "./makeReducer";
 
 // What is the state of the app?
 // (1) The string the user entered
@@ -31,8 +29,6 @@ const appActions = {
   updateEquation: updateEquationDuck.actionCreator,
   updateShape: updateShapeDuck.actionCreator
 };
-const ducks: Duck[] = [updateEquationDuck, updateShapeDuck];
-
-const reducer = makeReducer(ducks);
+const reducer = makeReducer([updateEquationDuck, updateShapeDuck]);
 
 export { initialState, reducer, appActions };

@@ -4,10 +4,7 @@ import {
   isContractionValidationResult,
   isSizedContractionValidationResult
 } from "./einsum_typeguards";
-import {
-  validateAsJson,
-  validateAndSizeFromShapesAsStringAsJson
-} from "./pkg/einsum.js";
+import { validateAsJson, validateAndSizeFromShapesAsStringAsJson } from "./pkg/einsum.js";
 import { parseShapeString } from "./parseShapeStrings";
 import { reducer, initialState, appActions } from "./appState";
 
@@ -21,9 +18,7 @@ const EinsumExplainer = () => {
     dispatch(appActions.updateEquation(e.target.value));
   };
 
-  const makeOnShapeChange = (index: number) => (
-    e: ChangeEvent<HTMLInputElement>
-  ) => {
+  const makeOnShapeChange = (index: number) => (e: ChangeEvent<HTMLInputElement>) => {
     dispatch(appActions.updateShape(index, e.target.value));
   };
 
@@ -46,20 +41,18 @@ const EinsumExplainer = () => {
     einsumSizedExplanation = anySizedEinsumExplanation;
   } else {
     einsumSizedExplanation = {
-      Err:
-        "validateAndSizeFromShapesAsStringAsJson returned an invalid response"
+      Err: "validateAndSizeFromShapesAsStringAsJson returned an invalid response"
     };
   }
 
   return (
     <>
       <p>
-        Equation:{" "}
-        <input type="text" onChange={onEquationChange} value={einsumString} />
+        Equation: <input type="text" onChange={onEquationChange} value={einsumString} />
       </p>
       <p>
-        There appear{visibleSizes > 1 ? "" : "s"} to be {visibleSizes} input
-        tensor{visibleSizes > 1 ? "s" : ""} in your equation.
+        There appear{visibleSizes > 1 ? "" : "s"} to be {visibleSizes} input tensor
+        {visibleSizes > 1 ? "s" : ""} in your equation.
       </p>
       {Array(visibleSizes)
         .fill(0)
