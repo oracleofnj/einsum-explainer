@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState, useReducer } from "react";
+import React, { ChangeEvent, useReducer } from "react";
 import ExplainerOutput from "./ExplainerOutput";
 import {
   isContractionValidationResult,
@@ -9,7 +9,6 @@ import {
   validateAndSizeFromShapesAsStringAsJson
 } from "./pkg/einsum.js";
 import { parseShapeString } from "./parseShapeStrings";
-import { stat } from "fs";
 
 // What is the state of the app?
 // (1) The string the user entered
@@ -49,7 +48,6 @@ function reducer(state: AppState, action: AppAction): AppState {
         ...state,
         equation: (action as UpdateEquationAction).equation
       };
-      break;
     default:
       return state;
   }
