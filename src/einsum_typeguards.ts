@@ -11,10 +11,11 @@ function isContraction(r: object): r is Contraction {
   );
 }
 
-function isContractionSuccess(
-  r: ContractionValidationResult
-): r is ContractionSuccess {
-  return r.hasOwnProperty("Ok") && isContraction((r as ContractionSuccess).Ok);
+function isContractionSuccess(r: any): r is ContractionSuccess {
+  return (
+    (r as object).hasOwnProperty("Ok") &&
+    isContraction((r as ContractionSuccess).Ok)
+  );
 }
 
 function isContractionValidationResult(
@@ -60,6 +61,7 @@ function isSizedContractionValidationResult(
 
 export {
   isErrorMessage,
+  isContractionSuccess,
   isContractionValidationResult,
   isSizedContractionValidationResult
 };

@@ -4,7 +4,7 @@
 
 input[type="text"] {
   font-size: calc(10px + 2vmin);
-  height: 4em;
+  height: 2em;
 }
 
 .App-logo {

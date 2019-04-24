@@ -1,6 +1,7 @@
 import React, { ChangeEvent, useReducer } from "react";
 import ExplainerOutput from "./ExplainerOutput";
 import {
+  isContractionSuccess,
   isContractionValidationResult,
   isSizedContractionValidationResult
 } from "./einsum_typeguards";
@@ -33,7 +34,12 @@ interface UpdateEquationAction extends AnyAction {
   equation: string;
 }
 
-type AppAction = UpdateEquationAction;
+interface UpdateShapeAction extends AnyAction {
+  index: number;
+  shape: string;
+}
+
+type AppAction = UpdateEquationAction | UpdateShapeAction;
 
 const initialState: AppState = {
   equation: "ij,jk->ik",
@@ -44,10 +50,35 @@ const initialState: AppState = {
 function reducer(state: AppState, action: AppAction): AppState {
   switch (action.type) {
     case "updateEquation":
+      const { equation } = action as UpdateEquationAction;
+      let anyEinsumExplanation: any = null;
+      let { visibleSizes } = state;
+
+      try {
+        anyEinsumExplanation = JSON.parse(validateAsJson(equation));
+        if (isContractionSuccess(anyEinsumExplanation)) {
+          visibleSizes = anyEinsumExplanation.Ok.operand_indices.length;
+        }
+        // tslint:disable-next-line: no-empty
+      } catch {}
+
       return {
         ...state,
+        visibleSizes,
         equation: (action as UpdateEquationAction).equation
       };
+
+    case "updateShape":
+      const { index, shape } = action as UpdateShapeAction;
+      return {
+        ...state,
+        operandShapes: [
+          ...state.operandShapes.slice(0, index),
+          shape,
+          ...state.operandShapes.slice(index + 1)
+        ]
+      };
+
     default:
       return state;
   }
@@ -56,10 +87,17 @@ function reducer(state: AppState, action: AppAction): AppState {
 const EinsumExplainer = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const einsumString = state.equation;
-  const shapes = state.operandShapes;
+  const { visibleSizes } = state;
+  const shapes = state.operandShapes.slice(0, visibleSizes);
 
-  const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const onEquationChange = (e: ChangeEvent<HTMLInputElement>) => {
     dispatch({ type: "updateEquation", equation: e.target.value });
+  };
+
+  const makeOnShapeChange = (index: number) => (
+    e: ChangeEvent<HTMLInputElement>
+  ) => {
+    dispatch({ type: "updateShape", index, shape: e.target.value });
   };
 
   let einsumExplanation: ContractionValidationResult;
@@ -89,7 +127,23 @@ const EinsumExplainer = () => {
   return (
     <>
       <p>
-        <input type="text" onChange={onInputChange} value={einsumString} />
+        <input type="text" onChange={onEquationChange} value={einsumString} />
+      </p>
+      {Array(visibleSizes)
+        .fill(0)
+        .map((_, index) => (
+          <p>
+            <input
+              key={index}
+              type="text"
+              onChange={makeOnShapeChange(index)}
+              value={typeof shapes[index] === "string" ? shapes[index] : "[]"}
+            />
+          </p>
+        ))}
+      <p>
+        There appear{visibleSizes > 1 ? "" : "s"} to be {visibleSizes} input
+        tensor{visibleSizes > 1 ? "s" : ""} in your equation.
       </p>
       <ExplainerOutput
         explanation={einsumExplanation}
