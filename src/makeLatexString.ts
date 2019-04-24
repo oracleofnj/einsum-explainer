@@ -5,8 +5,8 @@ function makeLatexString(contraction: Contraction): string {
     .map(idx => `\\sum_${idx}`)
     .join(" ");
   function makeInputMatrix(indices: string, n: number) {
-    const ascii_A: number = "A".charCodeAt(0);
-    const matrixName = String.fromCharCode(ascii_A + n);
+    const asciiA: number = "A".charCodeAt(0);
+    const matrixName = String.fromCharCode(asciiA + n);
     const subscripts = indices.split("").join(",");
 
     return `${matrixName}_{${subscripts}}`;

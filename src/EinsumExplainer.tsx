@@ -127,12 +127,18 @@ const EinsumExplainer = () => {
   return (
     <>
       <p>
+        Equation:{" "}
         <input type="text" onChange={onEquationChange} value={einsumString} />
+      </p>
+      <p>
+        There appear{visibleSizes > 1 ? "" : "s"} to be {visibleSizes} input
+        tensor{visibleSizes > 1 ? "s" : ""} in your equation.
       </p>
       {Array(visibleSizes)
         .fill(0)
         .map((_, index) => (
           <p>
+            Shape of {String.fromCharCode(index + "A".charCodeAt(0))}:{" "}
             <input
               key={index}
               type="text"
@@ -141,10 +147,6 @@ const EinsumExplainer = () => {
             />
           </p>
         ))}
-      <p>
-        There appear{visibleSizes > 1 ? "" : "s"} to be {visibleSizes} input
-        tensor{visibleSizes > 1 ? "s" : ""} in your equation.
-      </p>
       <ExplainerOutput
         explanation={einsumExplanation}
         sizedExplanation={einsumSizedExplanation}
