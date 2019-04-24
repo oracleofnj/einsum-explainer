@@ -1,6 +1,5 @@
-import React, { Component, useState } from "react";
+import React from "react";
 import EinsumExplainer from "./EinsumExplainer";
-import logo from "./logo.svg";
 import "./App.css";
 
 const App = () => {

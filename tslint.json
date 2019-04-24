@@ -7,7 +7,7 @@
     "array-type": {
       "options": ["array-simple"]
     },
-    "arrow-parens": true,
+    "arrow-parens": [true, "ban-single-arg-parens"],
     "arrow-return-shorthand": true,
     "ban-types": {
       "options": [
@@ -35,9 +35,7 @@
     "indent": {
       "options": ["spaces"]
     },
-    "interface-name": {
-      "options": ["always-prefix"]
-    },
+    "interface-name": false,
     "interface-over-type-literal": false,
     "jsdoc-format": true,
     "label-position": true,
@@ -84,7 +82,7 @@
     "no-var-requires": true,
     "object-literal-key-quotes": { "options": "consistent-as-needed" },
     "object-literal-shorthand": true,
-    "object-literal-sort-keys": true,
+    "object-literal-sort-keys": false,
     "one-line": {
       "options": [
         "check-catch",
@@ -202,7 +200,7 @@
     "no-unused-expression": true,
     // disable this rule as it is very heavy performance-wise and not that useful
     "no-use-before-declare": false,
-    "object-literal-sort-keys": true,
+    "object-literal-sort-keys": false,
     "one-line": {
       "options": [
         "check-catch",
