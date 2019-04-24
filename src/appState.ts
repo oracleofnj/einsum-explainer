@@ -1,6 +1,7 @@
 import updateEquationDuck, { UpdateEquationAction } from "./ducks/updateEquation";
 import updateShapeDuck, { UpdateShapeAction } from "./ducks/updateShape";
-import { makeReducer } from "./makeReducer";
+import addShapeDuck, { AddShapeAction } from "./ducks/addShape";
+import makeReducer from "./makeReducer";
 
 // What is the state of the app?
 // (1) The string the user entered
@@ -10,6 +11,14 @@ import { makeReducer } from "./makeReducer";
 // Note: (1) and (2) can conflict
 // This is OK!
 // However, when the string changes, update (2) automatically if the new string is valid
+
+// To make a new action:
+// (1) Make a duck (type, typeguard, actionCreator, reducer)
+// (2) Export the duck and an interface extending AnyAction from the duck file
+// (3) Import the duck and the action in this file
+// (4) Add the action to "type AppAction"
+// (5) Add the action to "const appActions"
+// (6) Add the duck to the call to makeReducer()
 
 export type AppState = {
   equation: string;
@@ -23,12 +32,13 @@ const initialState: AppState = {
   operandShapes: ["[10,3]", "[3,20]"]
 };
 
-export type AppAction = UpdateEquationAction | UpdateShapeAction;
+export type AppAction = AddShapeAction | UpdateEquationAction | UpdateShapeAction;
 
 const appActions = {
+  addShape: addShapeDuck.actionCreator,
   updateEquation: updateEquationDuck.actionCreator,
   updateShape: updateShapeDuck.actionCreator
 };
-const reducer = makeReducer([updateEquationDuck, updateShapeDuck]);
+const reducer = makeReducer([addShapeDuck, updateEquationDuck, updateShapeDuck]);
 
 export { initialState, reducer, appActions };

@@ -14,14 +14,17 @@ export type Duck = {
   reducer: Reducer;
 };
 
-function makeReducer(ducks: Duck[]): Reducer {
+export default function makeReducer(ducks: Duck[]): Reducer {
   const appReducers: { [key: string]: Reducer } = {};
+
   ducks.forEach(duck => {
-    appReducers[duck.type] = duck.reducer;
+    if (appReducers[duck.type]) {
+      throw new Error(`Multiple declarations for ${duck.type}`);
+    } else {
+      appReducers[duck.type] = duck.reducer;
+    }
   });
 
   return (state: AppState, action: AppAction): AppState =>
     appReducers[action.type](state, action);
 }
-
-export { makeReducer };

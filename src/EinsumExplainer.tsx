@@ -22,6 +22,10 @@ const EinsumExplainer = () => {
     dispatch(appActions.updateShape(index, e.target.value));
   };
 
+  const onAddShape = () => {
+    dispatch(appActions.addShape());
+  };
+
   let einsumExplanation: ContractionValidationResult;
   const anyEinsumExplanation = JSON.parse(validateAsJson(einsumString));
   if (isContractionValidationResult(anyEinsumExplanation)) {
@@ -47,6 +51,9 @@ const EinsumExplainer = () => {
 
   return (
     <>
+      <p>
+        <button onClick={onAddShape}>Add Shape</button>
+      </p>
       <p>
         Equation: <input type="text" onChange={onEquationChange} value={einsumString} />
       </p>
