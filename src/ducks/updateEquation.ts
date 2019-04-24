@@ -1,24 +1,26 @@
 import { validateAsJson } from "../pkg/einsum";
 import { isContractionSuccess } from "../einsum_typeguards";
+import { AppState, AppAction } from "../appState";
+import { AnyAction } from "../makeReducer";
 
 const UPDATE_EQUATION = "updateEquation";
-function updateEquation(equation: string): UpdateEquationAction {
-  return {
-    type: UPDATE_EQUATION,
-    equation
-  };
+
+export interface UpdateEquationAction extends AnyAction {
+  equation: string;
 }
-function isUpdateEquationAction(
-  action: AppAction
-): action is UpdateEquationAction {
-  return (
-    action.type === UPDATE_EQUATION &&
-    action.hasOwnProperty("equation") &&
-    typeof (action as UpdateEquationAction).equation === "string"
-  );
-}
-function updateEquationReducer(state: AppState, action: AppAction): AppState {
-  if (isUpdateEquationAction(action)) {
+
+const typeguard = (action: AppAction): action is UpdateEquationAction =>
+  action.type === UPDATE_EQUATION &&
+  action.hasOwnProperty("equation") &&
+  typeof (action as UpdateEquationAction).equation === "string";
+
+const actionCreator = (equation: string): UpdateEquationAction => ({
+  type: UPDATE_EQUATION,
+  equation
+});
+
+const reducer = (state: AppState, action: AppAction): AppState => {
+  if (typeguard(action)) {
     const { equation } = action;
     let anyEinsumExplanation: any = null;
     let { visibleSizes } = state;
@@ -37,13 +39,13 @@ function updateEquationReducer(state: AppState, action: AppAction): AppState {
       equation: (action as UpdateEquationAction).equation
     };
   } else {
-    throw new TypeError(JSON.stringify({ reducer: UPDATE_EQUATION, action }));
+    throw new TypeError(JSON.stringify({ action }));
   }
-}
+};
 
 export default {
   type: UPDATE_EQUATION,
-  typeguard: isUpdateEquationAction,
-  actionCreator: updateEquation,
-  reducer: updateEquationReducer
+  typeguard,
+  actionCreator,
+  reducer
 };

@@ -1,5 +1,13 @@
+import { AppState, AppAction } from "../appState";
+import { AnyAction } from "../makeReducer";
+
+export interface UpdateShapeAction extends AnyAction {
+  index: number;
+  shape: string;
+}
+
 const UPDATE_SHAPE = "updateShape";
-function isUpdateShapeAction(action: AppAction): action is UpdateShapeAction {
+function typeguard(action: AppAction): action is UpdateShapeAction {
   return (
     action.type === UPDATE_SHAPE &&
     action.hasOwnProperty("index") &&
@@ -8,8 +16,17 @@ function isUpdateShapeAction(action: AppAction): action is UpdateShapeAction {
     typeof (action as UpdateShapeAction).shape === "string"
   );
 }
-function updateShapeReducer(state: AppState, action: AppAction): AppState {
-  if (isUpdateShapeAction(action)) {
+
+function actionCreator(index: number, shape: string): UpdateShapeAction {
+  return {
+    type: UPDATE_SHAPE,
+    index,
+    shape
+  };
+}
+
+function reducer(state: AppState, action: AppAction): AppState {
+  if (typeguard(action)) {
     const { index, shape } = action;
     return {
       ...state,
@@ -23,17 +40,10 @@ function updateShapeReducer(state: AppState, action: AppAction): AppState {
     throw new TypeError(JSON.stringify({ reducer: UPDATE_SHAPE, action }));
   }
 }
-function updateShape(index: number, shape: string): UpdateShapeAction {
-  return {
-    type: UPDATE_SHAPE,
-    index,
-    shape
-  };
-}
 
 export default {
   type: UPDATE_SHAPE,
-  typeguard: isUpdateShapeAction,
-  actionCreator: updateShape,
-  reducer: updateShapeReducer
+  typeguard,
+  actionCreator,
+  reducer
 };

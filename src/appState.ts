@@ -1,6 +1,8 @@
-import updateEquationDuck from "./ducks/updateEquation";
-import updateShapeDuck from "./ducks/updateShape";
-import { makeReducer } from "./makeReducer";
+import updateEquationDuck, {
+  UpdateEquationAction
+} from "./ducks/updateEquation";
+import updateShapeDuck, { UpdateShapeAction } from "./ducks/updateShape";
+import { makeReducer, Duck } from "./makeReducer";
 
 // What is the state of the app?
 // (1) The string the user entered
@@ -11,11 +13,19 @@ import { makeReducer } from "./makeReducer";
 // This is OK!
 // However, when the string changes, update (2) automatically if the new string is valid
 
+export type AppState = {
+  equation: string;
+  visibleSizes: number;
+  operandShapes: string[];
+};
+
 const initialState: AppState = {
   equation: "ij,jk->ik",
   visibleSizes: 2,
   operandShapes: ["[10,3]", "[3,20]"]
 };
+
+export type AppAction = UpdateEquationAction | UpdateShapeAction;
 
 const appActions = {
   updateEquation: updateEquationDuck.actionCreator,
