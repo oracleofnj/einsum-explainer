@@ -4,7 +4,7 @@ import React from "react";
 import { isErrorMessage } from "./einsum_typeguards";
 import makeLatexString from "./makeLatexString";
 
-declare type ExplainerOutputProps = {
+type ExplainerOutputProps = {
   explanation: ContractionValidationResult;
   sizedExplanation: SizedContractionValidationResult;
 };

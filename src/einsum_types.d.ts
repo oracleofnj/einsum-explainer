@@ -1,29 +1,27 @@
-declare type Contraction = {
+type Contraction = {
   operand_indices: string[];
   output_indices: string[];
   summation_indices: string[];
 };
 
-declare type ErrorMessage = {
+type ErrorMessage = {
   Err: string;
 };
 
-declare type ContractionSuccess = {
+type ContractionSuccess = {
   Ok: Contraction;
 };
 
-declare type OutputSize = number[];
+type OutputSize = number[];
 
-declare type SizedContraction = {
+type SizedContraction = {
   contraction: Contraction;
   output_size: OutputSize;
 };
 
-declare type SizedContractionSuccess = {
+type SizedContractionSuccess = {
   Ok: SizedContraction;
 };
 
-declare type ContractionValidationResult = ContractionSuccess | ErrorMessage;
-declare type SizedContractionValidationResult =
-  | SizedContractionSuccess
-  | ErrorMessage;
+type ContractionValidationResult = ContractionSuccess | ErrorMessage;
+type SizedContractionValidationResult = SizedContractionSuccess | ErrorMessage;
