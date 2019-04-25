@@ -12,7 +12,7 @@ type ContractionSuccess = {
   Ok: Contraction;
 };
 
-type OutputSize = number[];
+type OutputSize = { [key: string]: number };
 
 type SizedContraction = {
   contraction: Contraction;

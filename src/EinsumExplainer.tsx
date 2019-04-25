@@ -64,10 +64,9 @@ const EinsumExplainer = () => {
       {Array(visibleSizes)
         .fill(0)
         .map((_, index) => (
-          <p>
+          <p key={index}>
             Shape of {String.fromCharCode(index + "A".charCodeAt(0))}:{" "}
             <input
-              key={index}
               type="text"
               onChange={makeOnShapeChange(index)}
               value={typeof shapes[index] === "string" ? shapes[index] : "[]"}

@@ -12,15 +12,10 @@ function isContraction(r: object): r is Contraction {
 }
 
 function isContractionSuccess(r: any): r is ContractionSuccess {
-  return (
-    (r as object).hasOwnProperty("Ok") &&
-    isContraction((r as ContractionSuccess).Ok)
-  );
+  return (r as object).hasOwnProperty("Ok") && isContraction((r as ContractionSuccess).Ok);
 }
 
-function isContractionValidationResult(
-  r: any
-): r is ContractionValidationResult {
+function isContractionValidationResult(r: any): r is ContractionValidationResult {
   return (
     isErrorMessage(r as ContractionValidationResult) ||
     isContractionSuccess(r as ContractionValidationResult)
@@ -28,10 +23,7 @@ function isContractionValidationResult(
 }
 
 function isOutputSize(r: any): r is OutputSize {
-  if (!(r instanceof Array)) {
-    return false;
-  }
-  return r.every((x: any) => typeof x === "number");
+  return Object.entries(r as object).every(([_, val]) => typeof val === "number");
 }
 
 function isSizedContraction(r: object): r is SizedContraction {
@@ -44,19 +36,11 @@ function isSizedContraction(r: object): r is SizedContraction {
 }
 
 function isSizedContractionSuccess(r: object): r is SizedContractionSuccess {
-  return (
-    r.hasOwnProperty("Ok") &&
-    isSizedContraction((r as SizedContractionSuccess).Ok)
-  );
+  return r.hasOwnProperty("Ok") && isSizedContraction((r as SizedContractionSuccess).Ok);
 }
 
-function isSizedContractionValidationResult(
-  r: any
-): r is SizedContractionValidationResult {
-  return (
-    isErrorMessage(r) ||
-    isSizedContractionSuccess(r as SizedContractionValidationResult)
-  );
+function isSizedContractionValidationResult(r: any): r is SizedContractionValidationResult {
+  return isErrorMessage(r) || isSizedContractionSuccess(r as SizedContractionValidationResult);
 }
 
 export {
