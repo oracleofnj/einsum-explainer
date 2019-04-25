@@ -3,7 +3,7 @@ import {
   isErrorMessage,
   SizedContractionValidationResult,
   isSizedContractionValidationResult
-} from "./einsum_typeguards";
+} from "../types/einsum_typeguards";
 
 type AxisLengthOutputProps = {
   sizedExplanationJSON: string;

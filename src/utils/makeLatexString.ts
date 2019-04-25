@@ -1,4 +1,4 @@
-import { Contraction } from "./einsum_typeguards";
+import { Contraction } from "../types/einsum_typeguards";
 
 function makeLatexString(contraction: Contraction): string {
   // Out_{i,k}=\sum_j A_{i,j} B_{j,k}

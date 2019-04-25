@@ -1,5 +1,5 @@
-import { validateAsJson } from "../pkg/einsum";
-import { isContractionSuccess } from "../einsum_typeguards";
+import { validateAsJson } from "../../pkg/einsum";
+import { isContractionSuccess } from "../../types/einsum_typeguards";
 import { AppState, AppAction } from "../appState";
 import { AnyAction } from "../makeReducer";
 

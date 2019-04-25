@@ -1,13 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import App from "./App";
-import * as serviceWorker from "./serviceWorker";
+import EinsumExplainer from "./components/EinsumExplainer";
+import * as serviceWorker from "./utils/serviceWorker";
 import init from "./pkg/einsum.js";
 
 (async function run() {
   await init("./pkg/einsum_bg.wasm");
-  ReactDOM.render(<App />, document.getElementById("root"));
+  ReactDOM.render(<EinsumExplainer />, document.getElementById("root"));
 })();
 
 // If you want your app to work offline and load faster, you can change

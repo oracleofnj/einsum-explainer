@@ -1,5 +1,5 @@
 import React, { ChangeEvent } from "react";
-import { appActions, AppState, AppAction } from "./appState";
+import { appActions, AppState, AppAction } from "../appstate/appState";
 
 type ExplainerInputProps = {
   appState: AppState;

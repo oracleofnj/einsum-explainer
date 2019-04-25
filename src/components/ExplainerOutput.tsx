@@ -1,9 +1,9 @@
 import React from "react";
 import ContractionOutput from "./ContractionOutput";
 import AxisLengthsOutput from "./AxisLengthsOutput";
-import { AppState } from "./appState";
-import { validateAsJson, validateAndSizeFromShapesAsStringAsJson } from "./pkg/einsum";
-import { parseShapeString } from "./parseShapeStrings";
+import { AppState } from "../appstate/appState";
+import { validateAsJson, validateAndSizeFromShapesAsStringAsJson } from "../pkg/einsum";
+import { parseShapeString } from "../utils/parseShapeStrings";
 
 type ExplainerOutputProps = {
   appState: AppState;

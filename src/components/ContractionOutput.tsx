@@ -5,8 +5,8 @@ import {
   isErrorMessage,
   ContractionValidationResult,
   isContractionValidationResult
-} from "./einsum_typeguards";
-import makeLatexString from "./makeLatexString";
+} from "../types/einsum_typeguards";
+import makeLatexString from "../utils/makeLatexString";
 
 type ContractionOutputProps = {
   explanationJSON: string;
