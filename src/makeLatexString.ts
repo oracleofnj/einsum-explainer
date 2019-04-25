@@ -1,3 +1,5 @@
+import { Contraction } from "./einsum_typeguards";
+
 function makeLatexString(contraction: Contraction): string {
   // Out_{i,k}=\sum_j A_{i,j} B_{j,k}
   const outputMatrix = `Out_{${contraction.output_indices.join(",")}}`;
