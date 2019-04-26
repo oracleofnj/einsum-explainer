@@ -1,12 +1,15 @@
 import updateEquationDuck, { UpdateEquationAction } from "./ducks/updateEquation";
 import updateShapeDuck, { UpdateShapeAction } from "./ducks/updateShape";
+import updateContentsDuck, { UpdateContentsAction } from "./ducks/updateContents";
 import addShapeDuck, { AddShapeAction } from "./ducks/addShape";
 import makeReducer from "./makeReducer";
+import range from "../utils/range";
 
 // What is the state of the app?
 // (1) The string the user entered
 // (2) How many arrays are visible that can have a size entered
-// (3) The sizes that have been entered (as strings)
+// (3) The shapes that have been entered (as strings)
+// (4) The contents that have been entered (as strings)
 //
 // Note: (1) and (2) can conflict
 // This is OK!
@@ -24,21 +27,33 @@ export type AppState = {
   equation: string;
   visibleSizes: number;
   operandShapes: string[];
+  operandContents: string[];
 };
 
 const initialState: AppState = {
   equation: "ij,jk->ik",
   visibleSizes: 2,
-  operandShapes: ["[10,3]", "[3,20]"]
+  operandShapes: ["[2,3]", "[3,5]"],
+  operandContents: [JSON.stringify(range(6)), JSON.stringify(range(0, 150, 10))]
 };
 
-export type AppAction = AddShapeAction | UpdateEquationAction | UpdateShapeAction;
+export type AppAction =
+  | AddShapeAction
+  | UpdateEquationAction
+  | UpdateShapeAction
+  | UpdateContentsAction;
 
 const appActions = {
   addShape: addShapeDuck.actionCreator,
   updateEquation: updateEquationDuck.actionCreator,
-  updateShape: updateShapeDuck.actionCreator
+  updateShape: updateShapeDuck.actionCreator,
+  updateContents: updateContentsDuck.actionCreator
 };
-const reducer = makeReducer([addShapeDuck, updateEquationDuck, updateShapeDuck]);
+const reducer = makeReducer([
+  addShapeDuck,
+  updateEquationDuck,
+  updateShapeDuck,
+  updateContentsDuck
+]);
 
 export { initialState, reducer, appActions };

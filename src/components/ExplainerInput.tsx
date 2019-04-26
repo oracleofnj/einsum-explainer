@@ -1,5 +1,6 @@
 import React, { ChangeEvent } from "react";
 import { appActions, AppState, AppAction } from "../appstate/appState";
+import range from "../utils/range";
 
 type ExplainerInputProps = {
   appState: AppState;
@@ -11,6 +12,7 @@ const ExplainerInput = (props: ExplainerInputProps) => {
   const einsumString = appState.equation;
   const { visibleSizes } = appState;
   const shapes = appState.operandShapes.slice(0, visibleSizes);
+  const contents = appState.operandContents.slice(0, visibleSizes);
 
   const onEquationChange = (e: ChangeEvent<HTMLInputElement>) => {
     dispatch(appActions.updateEquation(e.target.value));
@@ -18,6 +20,10 @@ const ExplainerInput = (props: ExplainerInputProps) => {
 
   const makeOnShapeChange = (index: number) => (e: ChangeEvent<HTMLInputElement>) => {
     dispatch(appActions.updateShape(index, e.target.value));
+  };
+
+  const makeOnContentsChange = (index: number) => (e: ChangeEvent<HTMLInputElement>) => {
+    dispatch(appActions.updateContents(index, e.target.value));
   };
 
   const onAddShape = () => {
@@ -36,18 +42,26 @@ const ExplainerInput = (props: ExplainerInputProps) => {
         There appear{visibleSizes > 1 ? "" : "s"} to be {visibleSizes} input tensor
         {visibleSizes > 1 ? "s" : ""} in your equation.
       </p>
-      {Array(visibleSizes)
-        .fill(0)
-        .map((_, index) => (
-          <p key={index}>
+      {range(visibleSizes).map(index => (
+        <p key={index}>
+          <div>
             Shape of {String.fromCharCode(index + "A".charCodeAt(0))}:{" "}
             <input
               type="text"
               onChange={makeOnShapeChange(index)}
               value={typeof shapes[index] === "string" ? shapes[index] : "[]"}
             />
-          </p>
-        ))}
+          </div>
+          <div>
+            Contents of {String.fromCharCode(index + "A".charCodeAt(0))}:{" "}
+            <input
+              type="text"
+              onChange={makeOnContentsChange(index)}
+              value={typeof contents[index] === "string" ? contents[index] : "[]"}
+            />
+          </div>
+        </p>
+      ))}
     </>
   );
 };
