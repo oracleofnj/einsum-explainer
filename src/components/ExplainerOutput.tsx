@@ -9,6 +9,7 @@ import {
 } from "../pkg/einsum";
 import { parseShapeString } from "../utils/parseShapeStrings";
 import range from "../utils/range";
+import parseOutput from "../utils/parseOutputString";
 
 type ExplainerOutputProps = {
   appState: AppState;
@@ -27,19 +28,41 @@ const ExplainerOutput = (props: ExplainerOutputProps) => {
     JSON.stringify(shapes.map(parseShapeString))
   );
   const attemptJSON = JSON.stringify(
-    range(visibleSizes).map(i => ({
-      shape: JSON.parse(shapes[i]),
-      contents: JSON.parse(contents[i])
-    }))
+    range(visibleSizes).map(i => {
+      let flattenedContents: number[] = [];
+      let unflattenedContents: any[];
+      try {
+        unflattenedContents = JSON.parse(contents[i]);
+        flattenedContents = unflattenedContents.flat(2 ** 16);
+      } catch {
+        flattenedContents = [];
+      }
+
+      return {
+        shape: parseShapeString(shapes[i]),
+        contents: flattenedContents
+      };
+    })
   );
   const outputJSON = slowEinsumAsJson(einsumString, attemptJSON);
+  let outputStr = "Nope";
+  try {
+    const output = JSON.parse(outputJSON);
+    if (output.Ok) {
+      outputStr = JSON.stringify(parseOutput(output.Ok.shape, output.Ok.contents));
+    } else {
+      outputStr = output.Err;
+    }
+  } catch {
+    outputStr = "Nope";
+  }
 
   return (
     <>
       <ContractionOutput explanationJSON={explanationJSON} />
       <AxisLengthsOutput sizedExplanationJSON={sizedExplanationJSON} />
       {attemptJSON}
-      {outputJSON}
+      {outputStr}
     </>
   );
 };
