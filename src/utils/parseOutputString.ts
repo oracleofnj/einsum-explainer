@@ -1,3 +1,5 @@
+import { FlattenedOperand } from "../types/einsum_typeguards";
+
 type NDArray = number | NDArrayArray;
 
 interface NDArrayArray extends Array<NDArray> {}
@@ -21,6 +23,7 @@ function unflatten(shape: number[], contents: number[]): NDArray {
   }
 }
 
-export default function parseOutput(shape: number[], contents: number[]): NDArray {
+export default function parseOutput(output: FlattenedOperand): NDArray {
+  const { shape, contents } = output;
   return unflatten(shape, contents);
 }

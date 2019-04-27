@@ -72,9 +72,40 @@ function isSizedContractionValidationResult(r: any): r is SizedContractionValida
   return isErrorMessage(r) || isSizedContractionSuccess(r as SizedContractionValidationResult);
 }
 
+export type FlattenedOperand = {
+  shape: number[];
+  contents: number[];
+};
+
+function isFlattenedOperand(r: object): r is FlattenedOperand {
+  return (
+    r.hasOwnProperty("shape") &&
+    (r as FlattenedOperand).shape instanceof Array &&
+    (r as FlattenedOperand).shape.every(x => typeof x === "number") &&
+    r.hasOwnProperty("contents") &&
+    (r as FlattenedOperand).contents instanceof Array &&
+    (r as FlattenedOperand).contents.every(x => typeof x === "number")
+  );
+}
+
+export type FlattenedOperandSuccess = {
+  Ok: FlattenedOperand;
+};
+
+function isFlattenedOperandSuccess(r: object): r is FlattenedOperandSuccess {
+  return r.hasOwnProperty("Ok") && isFlattenedOperand((r as FlattenedOperandSuccess).Ok);
+}
+
+export type FlattenedOperandResult = FlattenedOperandSuccess | ErrorMessage;
+
+function isFlattenedOperandResult(r: any): r is FlattenedOperandResult {
+  return isErrorMessage(r) || isFlattenedOperandSuccess(r as FlattenedOperandResult);
+}
+
 export {
   isErrorMessage,
   isContractionSuccess,
   isContractionValidationResult,
-  isSizedContractionValidationResult
+  isSizedContractionValidationResult,
+  isFlattenedOperandResult
 };

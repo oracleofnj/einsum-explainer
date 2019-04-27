@@ -26,40 +26,40 @@ const ExplainerInput = (props: ExplainerInputProps) => {
     dispatch(appActions.updateContents(index, e.target.value));
   };
 
-  const onAddShape = () => {
-    dispatch(appActions.addShape());
-  };
+  // const onAddShape = () => {
+  //   dispatch(appActions.addShape());
+  // };
 
   return (
     <>
-      <p>
+      {/* <p>
         <button onClick={onAddShape}>Add Shape</button>
-      </p>
+      </p> */}
       <p>
         Equation: <input type="text" onChange={onEquationChange} value={einsumString} />
       </p>
-      <p>
+      {/* <p>
         There appear{visibleSizes > 1 ? "" : "s"} to be {visibleSizes} input tensor
         {visibleSizes > 1 ? "s" : ""} in your equation.
-      </p>
+      </p> */}
       {range(visibleSizes).map(index => (
         <p key={index}>
-          <div>
+          <span>
             Shape of {String.fromCharCode(index + "A".charCodeAt(0))}:{" "}
             <input
               type="text"
               onChange={makeOnShapeChange(index)}
               value={typeof shapes[index] === "string" ? shapes[index] : "[]"}
             />
-          </div>
-          <div>
+          </span>
+          <span>
             Contents of {String.fromCharCode(index + "A".charCodeAt(0))}:{" "}
             <input
               type="text"
               onChange={makeOnContentsChange(index)}
               value={typeof contents[index] === "string" ? contents[index] : "[]"}
             />
-          </div>
+          </span>
         </p>
       ))}
     </>

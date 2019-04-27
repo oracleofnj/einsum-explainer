@@ -9,7 +9,7 @@ import {
 } from "../pkg/einsum";
 import { parseShapeString } from "../utils/parseShapeStrings";
 import range from "../utils/range";
-import parseOutput from "../utils/parseOutputString";
+import ComputationOutput from "./ComputationOutput";
 
 type ExplainerOutputProps = {
   appState: AppState;
@@ -27,41 +27,32 @@ const ExplainerOutput = (props: ExplainerOutputProps) => {
     einsumString,
     JSON.stringify(shapes.map(parseShapeString))
   );
-  const attemptJSON = JSON.stringify(
+  const operandsJSON = JSON.stringify(
     range(visibleSizes).map(i => {
-      let flattenedContents: number[] = [];
-      let unflattenedContents: any[];
-      try {
-        unflattenedContents = JSON.parse(contents[i]);
-        flattenedContents = unflattenedContents.flat(2 ** 16);
-      } catch {
-        flattenedContents = [];
-      }
-
       return {
         shape: parseShapeString(shapes[i]),
-        contents: flattenedContents
+        contents: parseShapeString(contents[i])
       };
     })
   );
-  const outputJSON = slowEinsumAsJson(einsumString, attemptJSON);
-  let outputStr = "Nope";
-  try {
-    const output = JSON.parse(outputJSON);
-    if (output.Ok) {
-      outputStr = JSON.stringify(parseOutput(output.Ok.shape, output.Ok.contents));
-    } else {
-      outputStr = output.Err;
-    }
-  } catch {
-    outputStr = "Nope";
-  }
+  const computationOutputJSON = slowEinsumAsJson(einsumString, operandsJSON);
+  // let outputStr = "Nope";
+  // try {
+  //   const output = JSON.parse(computationOutputJSON);
+  //   if (output.Ok) {
+  //     outputStr = JSON.stringify(parseOutput(output.Ok.shape, output.Ok.contents));
+  //   } else {
+  //     outputStr = output.Err;
+  //   }
+  // } catch {
+  //   outputStr = "Nope";
+  // }
 
   return (
     <>
       <ContractionOutput explanationJSON={explanationJSON} />
       <AxisLengthsOutput sizedExplanationJSON={sizedExplanationJSON} />
-      {outputStr}
+      <ComputationOutput computationOutputJSON={computationOutputJSON} />
     </>
   );
 };
