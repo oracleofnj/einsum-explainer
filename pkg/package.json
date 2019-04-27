@@ -1,0 +1,15 @@
+{
+  "name": "einsum",
+  "collaborators": [
+    "oracleofnj <jared.samet@aya.yale.edu>"
+  ],
+  "version": "0.1.0",
+  "files": [
+    "einsum_bg.wasm",
+    "einsum.js",
+    "einsum.d.ts"
+  ],
+  "module": "einsum.js",
+  "types": "einsum.d.ts",
+  "sideEffects": "false"
+}
