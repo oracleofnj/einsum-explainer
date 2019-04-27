@@ -61,7 +61,6 @@ const ExplainerOutput = (props: ExplainerOutputProps) => {
     <>
       <ContractionOutput explanationJSON={explanationJSON} />
       <AxisLengthsOutput sizedExplanationJSON={sizedExplanationJSON} />
-      {attemptJSON}
       {outputStr}
     </>
   );
