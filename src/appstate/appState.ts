@@ -28,13 +28,18 @@ export type AppState = {
   visibleSizes: number;
   operandShapes: string[];
   operandContents: string[];
+  operandVectors: number[][];
 };
 
 const initialState: AppState = {
   equation: "ij,jk->ik",
   visibleSizes: 2,
-  operandShapes: ["[2,3]", "[3,5]"],
-  operandContents: [JSON.stringify(range(6)), JSON.stringify(range(0, 150, 10))]
+  operandShapes: ["[2,3]", "[3,5]"].concat(Array(254).fill("[]")),
+  operandContents: [
+    JSON.stringify([range(3), range(3, 6)]),
+    JSON.stringify([range(0, 50, 10), range(50, 100, 10), range(100, 150, 10)])
+  ].concat(Array(254).fill("[]")),
+  operandVectors: [range(6), range(0, 150, 10)].concat(Array(254).fill([]))
 };
 
 export type AppAction =

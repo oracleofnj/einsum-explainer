@@ -26,6 +26,64 @@ export function enforce<T>(
   }
 }
 
+export function isNumberArray(r: any): r is number[] {
+  return r instanceof Array && r.every(x => typeof x === "number");
+}
+
+export type NDArray = number | NDArrayArray;
+
+interface NDArrayArray extends Array<NDArray> {}
+
+function isProbablyNDArray(r: any): r is NDArray {
+  if (typeof r === "number") {
+    return true;
+  }
+  if (!(r instanceof Array)) {
+    return false;
+  }
+  if (isNumberArray(r) && r.length !== 0) {
+    return true;
+  }
+  const first = r[0];
+  if (!(first instanceof Array) || first.length === 0) {
+    return false;
+  }
+  const len = first.length;
+  return (
+    len !== 0 && r.every(x => x instanceof Array && x.length === len && isProbablyNDArray(x))
+  );
+}
+
+export function getShape(arr: NDArray): Result<number[]> {
+  if (typeof arr === "number") {
+    return { Ok: [] };
+  }
+  const innerShape = getShape(arr[0]);
+  if (isErrorMessage(innerShape)) {
+    return innerShape;
+  }
+  for (let i = 1; i < arr.length; i++) {
+    const nextShape = getShape(arr[i]);
+    if (isErrorMessage(nextShape)) {
+      return nextShape;
+    }
+    if (!innerShape.Ok.every((val, ix) => nextShape.Ok[ix] === val)) {
+      return {
+        Err: "Array contains elements with different shapes"
+      };
+    }
+  }
+  return { Ok: [arr.length, ...innerShape.Ok] };
+}
+
+export function isNDArray(r: any): r is NDArray {
+  if (!isProbablyNDArray(r)) {
+    return false;
+  }
+  const shape = getShape(r);
+  return !isErrorMessage(shape);
+}
+
 export type Contraction = {
   operand_indices: string[];
   output_indices: string[];
@@ -69,10 +127,8 @@ export type FlattenedOperand = {
 export function isFlattenedOperand(r: object): r is FlattenedOperand {
   return (
     r.hasOwnProperty("shape") &&
-    (r as FlattenedOperand).shape instanceof Array &&
-    (r as FlattenedOperand).shape.every(x => typeof x === "number") &&
+    isNumberArray((r as FlattenedOperand).shape) &&
     r.hasOwnProperty("contents") &&
-    (r as FlattenedOperand).contents instanceof Array &&
-    (r as FlattenedOperand).contents.every(x => typeof x === "number")
+    isNumberArray((r as FlattenedOperand).contents)
   );
 }

@@ -18,7 +18,7 @@ const ShapesInput = ({ operandShapes, visibleSizes, dispatch }: ShapesInputProps
   };
 
   return (
-    <p>
+    <div>
       {shapes.map((data, index) => (
         <div key={index}>
           <span>
@@ -27,7 +27,7 @@ const ShapesInput = ({ operandShapes, visibleSizes, dispatch }: ShapesInputProps
           </span>
         </div>
       ))}
-    </p>
+    </div>
   );
 };
 

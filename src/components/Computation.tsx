@@ -3,8 +3,9 @@ import { AppAction } from "../appstate/appState";
 import { slowEinsumAsJson } from "../pkg/einsum";
 import ComputationOutput from "./ComputationOutput";
 import { parseShapeString } from "../utils/parseShapeStrings";
-import range from "../utils/range";
 import ContentsInput from "./ContentsInput";
+import { isErrorMessage } from "../types/einsum_typeguards";
+import { parseDataString } from "../utils/parseDataString";
 
 type ComputationProps = {
   equation: string;
@@ -23,15 +24,24 @@ const Computation = ({
 }: ComputationProps) => {
   const shapes = operandShapes.slice(0, visibleSizes);
   const contents = operandContents.slice(0, visibleSizes);
+  const operands = [];
+  for (let i = 0; i < Math.min(shapes.length, contents.length); i++) {
+    const shape = parseShapeString(shapes[i]);
+    const data = parseDataString(contents[i]);
 
-  const operandsJSON = JSON.stringify(
-    range(Math.min(shapes.length, contents.length)).map(i => {
-      return {
-        shape: parseShapeString(shapes[i]),
-        contents: parseShapeString(contents[i])
-      };
-    })
-  );
+    if (!isErrorMessage(shape) && !isErrorMessage(data) && typeof data.Ok !== "number") {
+      operands.push({
+        shape: shape.Ok,
+        contents: data.Ok.flat(2 ** 16)
+      });
+    } else {
+      operands.push({
+        Err: `Array ${i} doesn't work`
+      });
+    }
+  }
+
+  const operandsJSON = JSON.stringify(operands);
   const computationOutputJSON = slowEinsumAsJson(equation, operandsJSON);
 
   return (
@@ -41,6 +51,7 @@ const Computation = ({
         visibleSizes={visibleSizes}
         operandContents={operandContents}
       />
+      {operandsJSON}
       <ComputationOutput computationOutputJSON={computationOutputJSON} />
     </div>
   );

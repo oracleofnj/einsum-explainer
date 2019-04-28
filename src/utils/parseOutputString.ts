@@ -1,8 +1,4 @@
-import { FlattenedOperand } from "../types/einsum_typeguards";
-
-type NDArray = number | NDArrayArray;
-
-interface NDArrayArray extends Array<NDArray> {}
+import { FlattenedOperand, NDArray } from "../types/einsum_typeguards";
 
 function unflatten(shape: number[], contents: number[]): NDArray {
   switch (shape.length) {

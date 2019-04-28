@@ -18,7 +18,7 @@ const ContentsInput = ({ operandContents, visibleSizes, dispatch }: ContentsInpu
   };
 
   return (
-    <p>
+    <div>
       {contents.map((data, index) => (
         <div key={index}>
           <span>
@@ -27,7 +27,7 @@ const ContentsInput = ({ operandContents, visibleSizes, dispatch }: ContentsInpu
           </span>
         </div>
       ))}
-    </p>
+    </div>
   );
 };
 

@@ -1,5 +1,7 @@
 import { AppState, AppAction } from "../appState";
 import { AnyAction } from "../makeReducer";
+import { parseDataString } from "../../utils/parseDataString";
+import { isErrorMessage, getShape } from "../../types/einsum_typeguards";
 
 export interface UpdateContentsAction extends AnyAction {
   index: number;
@@ -28,14 +30,40 @@ function actionCreator(index: number, contents: string): UpdateContentsAction {
 function reducer(state: AppState, action: AppAction): AppState {
   if (typeguard(action)) {
     const { index, contents } = action;
-    return {
-      ...state,
-      operandContents: [
-        ...state.operandContents.slice(0, index),
-        contents,
-        ...state.operandContents.slice(index + 1)
-      ]
-    };
+    const data = parseDataString(contents);
+    if (isErrorMessage(data)) {
+      return {
+        ...state,
+        operandContents: [
+          ...state.operandContents.slice(0, index),
+          contents,
+          ...state.operandContents.slice(index + 1)
+        ]
+      };
+    } else {
+      const shape = getShape(data.Ok);
+      if (isErrorMessage(shape)) {
+        throw new Error("This shouldn't be possible");
+      }
+      return {
+        ...state,
+        operandContents: [
+          ...state.operandContents.slice(0, index),
+          contents,
+          ...state.operandContents.slice(index + 1)
+        ],
+        operandShapes: [
+          ...state.operandShapes.slice(0, index),
+          JSON.stringify(shape.Ok),
+          ...state.operandShapes.slice(index + 1)
+        ],
+        operandVectors: [
+          ...state.operandVectors.slice(0, index),
+          shape.Ok.flat(2 ** 16),
+          ...state.operandVectors.slice(index + 1)
+        ]
+      };
+    }
   } else {
     throw new TypeError(JSON.stringify({ reducer: UPDATE_CONTENTS, action }));
   }
