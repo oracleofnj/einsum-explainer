@@ -29,7 +29,9 @@ function isContractionSuccess(r: any): r is ContractionSuccess {
   return (r as object).hasOwnProperty("Ok") && isContraction((r as ContractionSuccess).Ok);
 }
 
-export type ContractionValidationResult = ContractionSuccess | ErrorMessage;
+export type Result<T> = T | ErrorMessage;
+
+export type ContractionValidationResult = Result<ContractionSuccess>;
 
 function isContractionValidationResult(r: any): r is ContractionValidationResult {
   return (

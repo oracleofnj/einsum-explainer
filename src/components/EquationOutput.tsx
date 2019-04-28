@@ -1,12 +1,9 @@
 import { renderToString } from "katex";
 import "katex/dist/katex.min.css";
 import React from "react";
-import {
-  isErrorMessage,
-  ContractionValidationResult,
-  isContractionValidationResult
-} from "../types/einsum_typeguards";
+import { isErrorMessage, isContractionValidationResult } from "../types/einsum_typeguards";
 import makeLatexString from "../utils/makeLatexString";
+import parseAndTypecheckJSON from "../utils/parseAndTypecheckJSON";
 
 type EquationOutputProps = {
   explanationJSON: string;
@@ -16,13 +13,11 @@ const EquationOutput = (props: EquationOutputProps) => {
   const { explanationJSON } = props;
   let contractionErrorMessage;
   let dangerousKatexHTML;
-  let explanation: ContractionValidationResult;
-  const anyEinsumExplanation = JSON.parse(explanationJSON);
-  if (isContractionValidationResult(anyEinsumExplanation)) {
-    explanation = anyEinsumExplanation;
-  } else {
-    explanation = { Err: "validateAsJson returned an invalid response" };
-  }
+  const explanation = parseAndTypecheckJSON(
+    explanationJSON,
+    isContractionValidationResult,
+    "validateAsJson"
+  );
 
   if (isErrorMessage(explanation)) {
     contractionErrorMessage = explanation.Err;

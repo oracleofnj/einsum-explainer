@@ -1,9 +1,6 @@
 import React from "react";
-import {
-  isErrorMessage,
-  SizedContractionValidationResult,
-  isSizedContractionValidationResult
-} from "../types/einsum_typeguards";
+import { isErrorMessage, isSizedContractionValidationResult } from "../types/einsum_typeguards";
+import parseAndTypecheckJSON from "../utils/parseAndTypecheckJSON";
 
 type AxisLengthOutputProps = {
   sizedExplanationJSON: string;
@@ -13,15 +10,12 @@ const AxisLengthsOutput = (props: AxisLengthOutputProps) => {
   const { sizedExplanationJSON } = props;
   let sizeErrorMessage;
   let outputSize;
-  let sizedExplanation: SizedContractionValidationResult;
-  const anySizedExplanation = JSON.parse(sizedExplanationJSON);
-  if (isSizedContractionValidationResult(anySizedExplanation)) {
-    sizedExplanation = anySizedExplanation;
-  } else {
-    sizedExplanation = {
-      Err: "validateAndSizeFromShapesAsStringAsJson returned an invalid response"
-    };
-  }
+
+  const sizedExplanation = parseAndTypecheckJSON(
+    sizedExplanationJSON,
+    isSizedContractionValidationResult,
+    "validateAndSizeFromShapesAsStringAsJson"
+  );
 
   if (isErrorMessage(sizedExplanation)) {
     sizeErrorMessage = sizedExplanation.Err;

@@ -8,10 +8,8 @@ const EinsumExplainer = () => {
   const [appState, dispatch] = useReducer(reducer, initialState);
   return (
     <div className="App">
-      <header className="App-header">
-        <ExplainerInput appState={appState} dispatch={dispatch} />
-        <ExplainerOutput appState={appState} />
-      </header>
+      <ExplainerInput appState={appState} dispatch={dispatch} />
+      <ExplainerOutput appState={appState} />
     </div>
   );
 };
