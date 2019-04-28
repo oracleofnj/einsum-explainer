@@ -1,15 +1,23 @@
 import React, { useReducer } from "react";
-import ExplainerInput from "./ExplainerInput";
-import ExplainerOutput from "./ExplainerOutput";
 import { reducer, initialState } from "../appstate/appState";
 import "./App.css";
+import Equation from "./Equation";
+import Shapes from "./Shapes";
 
 const EinsumExplainer = () => {
   const [appState, dispatch] = useReducer(reducer, initialState);
+  const { equation, visibleSizes, operandContents, operandShapes } = appState;
+
   return (
     <div className="App">
-      <ExplainerInput appState={appState} dispatch={dispatch} />
-      <ExplainerOutput appState={appState} />
+      <Equation equation={equation} dispatch={dispatch} />
+      <Shapes
+        equation={equation}
+        dispatch={dispatch}
+        visibleSizes={visibleSizes}
+        operandContents={operandContents}
+        operandShapes={operandShapes}
+      />
     </div>
   );
 };

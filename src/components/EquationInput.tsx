@@ -6,9 +6,7 @@ type ExplainerInputProps = {
   dispatch: React.Dispatch<AppAction>;
 };
 
-const EquationInput = (props: ExplainerInputProps) => {
-  const { equation, dispatch } = props;
-
+const EquationInput = ({ equation, dispatch }: ExplainerInputProps) => {
   const onEquationChange = (e: ChangeEvent<HTMLInputElement>) => {
     dispatch(appActions.updateEquation(e.target.value));
   };
