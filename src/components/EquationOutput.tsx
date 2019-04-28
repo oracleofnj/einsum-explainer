@@ -1,7 +1,7 @@
 import { renderToString } from "katex";
 import "katex/dist/katex.min.css";
 import React from "react";
-import { isErrorMessage, isContractionValidationResult } from "../types/einsum_typeguards";
+import { isErrorMessage, isContraction } from "../types/einsum_typeguards";
 import makeLatexString from "../utils/makeLatexString";
 import parseAndTypecheckJSON from "../utils/parseAndTypecheckJSON";
 
@@ -13,11 +13,7 @@ const EquationOutput = (props: EquationOutputProps) => {
   const { explanationJSON } = props;
   let contractionErrorMessage;
   let dangerousKatexHTML;
-  const explanation = parseAndTypecheckJSON(
-    explanationJSON,
-    isContractionValidationResult,
-    "validateAsJson"
-  );
+  const explanation = parseAndTypecheckJSON(explanationJSON, isContraction, "validateAsJson");
 
   if (isErrorMessage(explanation)) {
     contractionErrorMessage = explanation.Err;

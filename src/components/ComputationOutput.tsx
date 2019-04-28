@@ -1,5 +1,5 @@
 import React from "react";
-import { isErrorMessage, isFlattenedOperandResult } from "../types/einsum_typeguards";
+import { isErrorMessage, isFlattenedOperand } from "../types/einsum_typeguards";
 import parseOutput from "../utils/parseOutputString";
 import parseAndTypecheckJSON from "../utils/parseAndTypecheckJSON";
 
@@ -13,7 +13,7 @@ const ComputationOutput = (props: ComputationOutputProps) => {
   let outputStr;
   const computationOutput = parseAndTypecheckJSON(
     computationOutputJSON,
-    isFlattenedOperandResult,
+    isFlattenedOperand,
     "slowEinsumAsJson"
   );
 

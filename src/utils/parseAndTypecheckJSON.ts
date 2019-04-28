@@ -1,4 +1,4 @@
-import { Result } from "../types/einsum_typeguards";
+import { Result, isErrorMessage, isOk } from "../types/einsum_typeguards";
 
 export default function parseAndTypecheckJSON<T>(
   str: string,
@@ -13,7 +13,9 @@ export default function parseAndTypecheckJSON<T>(
       Err: `${problematicFunctionName} returned invalid JSON`
     };
   }
-  if (typeguard(obj)) {
+  if (isOk(obj, typeguard)) {
+    return obj;
+  } else if (isErrorMessage(obj)) {
     return obj;
   } else {
     return { Err: `${problematicFunctionName} returned valid JSON but of the wrong type` };

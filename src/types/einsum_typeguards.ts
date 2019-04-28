@@ -6,6 +6,12 @@ function isErrorMessage(r: any): r is ErrorMessage {
   return (r as object).hasOwnProperty("Err");
 }
 
+export type Result<T> = { Ok: T } | ErrorMessage;
+
+function isOk<T>(r: any, typeguard: (obj: any) => obj is T): r is Result<T> {
+  return (r as object).hasOwnProperty("Ok") && typeguard((r as { Ok: T }).Ok);
+}
+
 export type Contraction = {
   operand_indices: string[];
   output_indices: string[];
@@ -18,25 +24,6 @@ function isContraction(r: object): r is Contraction {
     (r as Contraction).operand_indices instanceof Array &&
     r.hasOwnProperty("output_indices") &&
     r.hasOwnProperty("summation_indices")
-  );
-}
-
-export type ContractionSuccess = {
-  Ok: Contraction;
-};
-
-function isContractionSuccess(r: any): r is ContractionSuccess {
-  return (r as object).hasOwnProperty("Ok") && isContraction((r as ContractionSuccess).Ok);
-}
-
-export type Result<T> = T | ErrorMessage;
-
-export type ContractionValidationResult = Result<ContractionSuccess>;
-
-function isContractionValidationResult(r: any): r is ContractionValidationResult {
-  return (
-    isErrorMessage(r as ContractionValidationResult) ||
-    isContractionSuccess(r as ContractionValidationResult)
   );
 }
 
@@ -60,20 +47,6 @@ function isSizedContraction(r: object): r is SizedContraction {
   );
 }
 
-export type SizedContractionSuccess = {
-  Ok: SizedContraction;
-};
-
-function isSizedContractionSuccess(r: object): r is SizedContractionSuccess {
-  return r.hasOwnProperty("Ok") && isSizedContraction((r as SizedContractionSuccess).Ok);
-}
-
-export type SizedContractionValidationResult = SizedContractionSuccess | ErrorMessage;
-
-function isSizedContractionValidationResult(r: any): r is SizedContractionValidationResult {
-  return isErrorMessage(r) || isSizedContractionSuccess(r as SizedContractionValidationResult);
-}
-
 export type FlattenedOperand = {
   shape: number[];
   contents: number[];
@@ -90,24 +63,4 @@ function isFlattenedOperand(r: object): r is FlattenedOperand {
   );
 }
 
-export type FlattenedOperandSuccess = {
-  Ok: FlattenedOperand;
-};
-
-function isFlattenedOperandSuccess(r: object): r is FlattenedOperandSuccess {
-  return r.hasOwnProperty("Ok") && isFlattenedOperand((r as FlattenedOperandSuccess).Ok);
-}
-
-export type FlattenedOperandResult = FlattenedOperandSuccess | ErrorMessage;
-
-function isFlattenedOperandResult(r: any): r is FlattenedOperandResult {
-  return isErrorMessage(r) || isFlattenedOperandSuccess(r as FlattenedOperandResult);
-}
-
-export {
-  isErrorMessage,
-  isContractionSuccess,
-  isContractionValidationResult,
-  isSizedContractionValidationResult,
-  isFlattenedOperandResult
-};
+export { isOk, isErrorMessage, isContraction, isSizedContraction, isFlattenedOperand };
