@@ -3,6 +3,7 @@ import { reducer, initialState } from "../appstate/appState";
 import "./App.css";
 import Equation from "./Equation";
 import Shapes from "./Shapes";
+import Computation from "./Computation";
 
 const EinsumExplainer = () => {
   const [appState, dispatch] = useReducer(reducer, initialState);
@@ -12,6 +13,12 @@ const EinsumExplainer = () => {
     <div className="App">
       <Equation equation={equation} dispatch={dispatch} />
       <Shapes
+        equation={equation}
+        dispatch={dispatch}
+        visibleSizes={visibleSizes}
+        operandShapes={operandShapes}
+      />
+      <Computation
         equation={equation}
         dispatch={dispatch}
         visibleSizes={visibleSizes}
