@@ -1,6 +1,7 @@
-import React, { ChangeEvent } from "react";
-import { appActions, AppState, AppAction } from "../appstate/appState";
-import range from "../utils/range";
+import React from "react";
+import { AppState, AppAction } from "../appstate/appState";
+import EquationInput from "./EquationInput";
+import ShapesAndContentsInput from "./ShapesAndContentsInput";
 
 type ExplainerInputProps = {
   appState: AppState;
@@ -9,59 +10,17 @@ type ExplainerInputProps = {
 
 const ExplainerInput = (props: ExplainerInputProps) => {
   const { appState, dispatch } = props;
-  const einsumString = appState.equation;
-  const { visibleSizes } = appState;
-  const shapes = appState.operandShapes.slice(0, visibleSizes);
-  const contents = appState.operandContents.slice(0, visibleSizes);
-
-  const onEquationChange = (e: ChangeEvent<HTMLInputElement>) => {
-    dispatch(appActions.updateEquation(e.target.value));
-  };
-
-  const makeOnShapeChange = (index: number) => (e: ChangeEvent<HTMLInputElement>) => {
-    dispatch(appActions.updateShape(index, e.target.value));
-  };
-
-  const makeOnContentsChange = (index: number) => (e: ChangeEvent<HTMLInputElement>) => {
-    dispatch(appActions.updateContents(index, e.target.value));
-  };
-
-  // const onAddShape = () => {
-  //   dispatch(appActions.addShape());
-  // };
+  const { equation, visibleSizes, operandContents, operandShapes } = appState;
 
   return (
     <>
-      {/* <p>
-        <button onClick={onAddShape}>Add Shape</button>
-      </p> */}
-      <p>
-        Equation: <input type="text" onChange={onEquationChange} value={einsumString} />
-      </p>
-      {/* <p>
-        There appear{visibleSizes > 1 ? "" : "s"} to be {visibleSizes} input tensor
-        {visibleSizes > 1 ? "s" : ""} in your equation.
-      </p> */}
-      {range(visibleSizes).map(index => (
-        <p key={index}>
-          <span>
-            Shape of {String.fromCharCode(index + "A".charCodeAt(0))}:{" "}
-            <input
-              type="text"
-              onChange={makeOnShapeChange(index)}
-              value={typeof shapes[index] === "string" ? shapes[index] : "[]"}
-            />
-          </span>
-          <span>
-            Contents of {String.fromCharCode(index + "A".charCodeAt(0))}:{" "}
-            <input
-              type="text"
-              onChange={makeOnContentsChange(index)}
-              value={typeof contents[index] === "string" ? contents[index] : "[]"}
-            />
-          </span>
-        </p>
-      ))}
+      <EquationInput equation={equation} dispatch={dispatch} />
+      <ShapesAndContentsInput
+        dispatch={dispatch}
+        visibleSizes={visibleSizes}
+        operandContents={operandContents}
+        operandShapes={operandShapes}
+      />
     </>
   );
 };

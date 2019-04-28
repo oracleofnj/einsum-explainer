@@ -8,11 +8,11 @@ import {
 } from "../types/einsum_typeguards";
 import makeLatexString from "../utils/makeLatexString";
 
-type ContractionOutputProps = {
+type EquationOutputProps = {
   explanationJSON: string;
 };
 
-const ContractionOutput = (props: ContractionOutputProps) => {
+const EquationOutput = (props: EquationOutputProps) => {
   const { explanationJSON } = props;
   let contractionErrorMessage;
   let dangerousKatexHTML;
@@ -47,4 +47,4 @@ const ContractionOutput = (props: ContractionOutputProps) => {
   );
 };
 
-export default ContractionOutput;
+export default EquationOutput;

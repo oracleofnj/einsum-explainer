@@ -1,5 +1,5 @@
 import React from "react";
-import ContractionOutput from "./ContractionOutput";
+import EquationOutput from "./EquationOutput";
 import AxisLengthsOutput from "./AxisLengthsOutput";
 import { AppState } from "../appstate/appState";
 import {
@@ -28,7 +28,7 @@ const ExplainerOutput = (props: ExplainerOutputProps) => {
     JSON.stringify(shapes.map(parseShapeString))
   );
   const operandsJSON = JSON.stringify(
-    range(visibleSizes).map(i => {
+    range(Math.min(shapes.length, contents.length)).map(i => {
       return {
         shape: parseShapeString(shapes[i]),
         contents: parseShapeString(contents[i])
@@ -36,21 +36,10 @@ const ExplainerOutput = (props: ExplainerOutputProps) => {
     })
   );
   const computationOutputJSON = slowEinsumAsJson(einsumString, operandsJSON);
-  // let outputStr = "Nope";
-  // try {
-  //   const output = JSON.parse(computationOutputJSON);
-  //   if (output.Ok) {
-  //     outputStr = JSON.stringify(parseOutput(output.Ok.shape, output.Ok.contents));
-  //   } else {
-  //     outputStr = output.Err;
-  //   }
-  // } catch {
-  //   outputStr = "Nope";
-  // }
 
   return (
     <>
-      <ContractionOutput explanationJSON={explanationJSON} />
+      <EquationOutput explanationJSON={explanationJSON} />
       <AxisLengthsOutput sizedExplanationJSON={sizedExplanationJSON} />
       <ComputationOutput computationOutputJSON={computationOutputJSON} />
     </>
