@@ -54,12 +54,14 @@ function reducer(state: AppState, action: AppAction): AppState {
         ],
         operandShapes: [
           ...state.operandShapes.slice(0, index),
-          JSON.stringify(shape.Ok),
+          JSON.stringify(shape.Ok)
+            .replace(/\[/g, "(")
+            .replace(/\]/g, ")"),
           ...state.operandShapes.slice(index + 1)
         ],
         operandVectors: [
           ...state.operandVectors.slice(0, index),
-          shape.Ok.flat(2 ** 16),
+          (data.Ok as number[]).flat(2 ** 16),
           ...state.operandVectors.slice(index + 1)
         ]
       };

@@ -20,7 +20,7 @@ const ComputationOutput = (props: ComputationOutputProps) => {
   if (isErrorMessage(computationOutput)) {
     errorMessage = computationOutput.Err;
   } else {
-    outputStr = JSON.stringify(parseOutput(computationOutput.Ok));
+    outputStr = JSON.stringify(parseOutput(computationOutput.Ok), null, 2);
   }
 
   return isErrorMessage(computationOutput) ? (
@@ -31,7 +31,8 @@ const ComputationOutput = (props: ComputationOutputProps) => {
   ) : (
     <>
       <p>Your computation is valid!</p>
-      <div>Einsum Result: {outputStr}</div>
+      <div>Einsum Result:</div>
+      <div>{outputStr}</div>
     </>
   );
 };
