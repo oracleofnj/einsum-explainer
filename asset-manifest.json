@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.css": "/einsum-explainer/static/css/main.d62f5082.chunk.css",
-    "main.js": "/einsum-explainer/static/js/main.fdbb46b2.chunk.js",
-    "main.js.map": "/einsum-explainer/static/js/main.fdbb46b2.chunk.js.map",
+    "main.css": "/einsum-explainer/static/css/main.86674015.chunk.css",
+    "main.js": "/einsum-explainer/static/js/main.89b79b44.chunk.js",
+    "main.js.map": "/einsum-explainer/static/js/main.89b79b44.chunk.js.map",
     "runtime~main.js": "/einsum-explainer/static/js/runtime~main.ed721f28.js",
     "runtime~main.js.map": "/einsum-explainer/static/js/runtime~main.ed721f28.js.map",
-    "static/css/2.3478b84f.chunk.css": "/einsum-explainer/static/css/2.3478b84f.chunk.css",
-    "static/js/2.60c17cb3.chunk.js": "/einsum-explainer/static/js/2.60c17cb3.chunk.js",
-    "static/js/2.60c17cb3.chunk.js.map": "/einsum-explainer/static/js/2.60c17cb3.chunk.js.map",
+    "static/css/2.61a00b32.chunk.css": "/einsum-explainer/static/css/2.61a00b32.chunk.css",
+    "static/js/2.1447f1e8.chunk.js": "/einsum-explainer/static/js/2.1447f1e8.chunk.js",
+    "static/js/2.1447f1e8.chunk.js.map": "/einsum-explainer/static/js/2.1447f1e8.chunk.js.map",
     "index.html": "/einsum-explainer/index.html",
-    "precache-manifest.d186b3f9780ecf20318583c960d70e56.js": "/einsum-explainer/precache-manifest.d186b3f9780ecf20318583c960d70e56.js",
+    "precache-manifest.eafc903713d74252f1d353ee4a7f5976.js": "/einsum-explainer/precache-manifest.eafc903713d74252f1d353ee4a7f5976.js",
     "service-worker.js": "/einsum-explainer/service-worker.js",
-    "static/css/2.3478b84f.chunk.css.map": "/einsum-explainer/static/css/2.3478b84f.chunk.css.map",
-    "static/css/main.d62f5082.chunk.css.map": "/einsum-explainer/static/css/main.d62f5082.chunk.css.map",
+    "static/css/2.61a00b32.chunk.css.map": "/einsum-explainer/static/css/2.61a00b32.chunk.css.map",
+    "static/css/main.86674015.chunk.css.map": "/einsum-explainer/static/css/main.86674015.chunk.css.map",
     "static/media/katex.min.css": "/einsum-explainer/static/media/KaTeX_Typewriter-Regular.e52da442.woff"
   }
 }
