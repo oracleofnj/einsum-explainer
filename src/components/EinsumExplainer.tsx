@@ -10,7 +10,7 @@ const EinsumExplainer = () => {
   const { equation, visibleSizes, operandContents, operandShapes } = appState;
 
   return (
-    <div className="App">
+    <div className="wrap container-fluid">
       <Equation equation={equation} dispatch={dispatch} />
       <Shapes
         equation={equation}

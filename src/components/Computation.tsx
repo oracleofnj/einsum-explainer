@@ -6,6 +6,7 @@ import { parseShapeString } from "../utils/parseShapeStrings";
 import ContentsInput from "./ContentsInput";
 import { isErrorMessage } from "../types/einsum_typeguards";
 import { parseDataString } from "../utils/parseDataString";
+import InputOutputRow from "./InputOutputRow";
 
 type ComputationProps = {
   equation: string;
@@ -45,14 +46,16 @@ const Computation = ({
   const computationOutputJSON = slowEinsumAsJson(equation, operandsJSON);
 
   return (
-    <div>
-      <ContentsInput
-        dispatch={dispatch}
-        visibleSizes={visibleSizes}
-        operandContents={operandContents}
-      />
-      <ComputationOutput computationOutputJSON={computationOutputJSON} />
-    </div>
+    <InputOutputRow
+      input={
+        <ContentsInput
+          dispatch={dispatch}
+          visibleSizes={visibleSizes}
+          operandContents={operandContents}
+        />
+      }
+      output={<ComputationOutput computationOutputJSON={computationOutputJSON} />}
+    />
   );
 };
 

@@ -3,6 +3,7 @@ import { AppAction } from "../appstate/appState";
 import EquationInput from "./EquationInput";
 import { validateAsJson } from "../pkg/einsum";
 import EquationOutput from "./EquationOutput";
+import InputOutputRow from "./InputOutputRow";
 
 type EquationProps = {
   equation: string;
@@ -12,10 +13,10 @@ type EquationProps = {
 const Equation = ({ equation, dispatch }: EquationProps) => {
   const equationJSON = validateAsJson(equation);
   return (
-    <div>
-      <EquationInput equation={equation} dispatch={dispatch} />
-      <EquationOutput explanationJSON={equationJSON} />
-    </div>
+    <InputOutputRow
+      input={<EquationInput equation={equation} dispatch={dispatch} />}
+      output={<EquationOutput explanationJSON={equationJSON} />}
+    />
   );
 };
 

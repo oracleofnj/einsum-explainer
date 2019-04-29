@@ -5,6 +5,7 @@ import AxisLengthsOutput from "./AxisLengthsOutput";
 import { parseShapeString } from "../utils/parseShapeStrings";
 import ShapesInput from "./ShapesInput";
 import { isErrorMessage } from "../types/einsum_typeguards";
+import InputOutputRow from "./InputOutputRow";
 
 type ShapesProps = {
   equation: string;
@@ -30,17 +31,21 @@ const Shapes = ({ equation, visibleSizes, operandShapes, dispatch }: ShapesProps
   }
 
   return (
-    <div>
-      <ShapesInput
-        dispatch={dispatch}
-        visibleSizes={visibleSizes}
-        operandShapes={operandShapes}
-      />
-      <AxisLengthsOutput
-        sizedExplanationJSON={sizedExplanationJSON}
-        equationJSON={equationJSON}
-      />
-    </div>
+    <InputOutputRow
+      input={
+        <ShapesInput
+          dispatch={dispatch}
+          visibleSizes={visibleSizes}
+          operandShapes={operandShapes}
+        />
+      }
+      output={
+        <AxisLengthsOutput
+          sizedExplanationJSON={sizedExplanationJSON}
+          equationJSON={equationJSON}
+        />
+      }
+    />
   );
 };
 
