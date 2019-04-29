@@ -1,6 +1,6 @@
 import React from "react";
 import { AppAction } from "../appstate/appState";
-import { validateAndSizeFromShapesAsStringAsJson } from "../pkg/einsum";
+import { validateAndSizeFromShapesAsStringAsJson, validateAsJson } from "../pkg/einsum";
 import AxisLengthsOutput from "./AxisLengthsOutput";
 import { parseShapeString } from "../utils/parseShapeStrings";
 import ShapesInput from "./ShapesInput";
@@ -14,6 +14,7 @@ type ShapesProps = {
 };
 
 const Shapes = ({ equation, visibleSizes, operandShapes, dispatch }: ShapesProps) => {
+  const equationJSON = validateAsJson(equation);
   const shapes = operandShapes.slice(0, visibleSizes);
   const shapeArrays = shapes.map(parseShapeString);
   let sizedExplanationJSON;
@@ -35,7 +36,10 @@ const Shapes = ({ equation, visibleSizes, operandShapes, dispatch }: ShapesProps
         visibleSizes={visibleSizes}
         operandShapes={operandShapes}
       />
-      <AxisLengthsOutput sizedExplanationJSON={sizedExplanationJSON} />
+      <AxisLengthsOutput
+        sizedExplanationJSON={sizedExplanationJSON}
+        equationJSON={equationJSON}
+      />
     </div>
   );
 };

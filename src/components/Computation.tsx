@@ -51,7 +51,6 @@ const Computation = ({
         visibleSizes={visibleSizes}
         operandContents={operandContents}
       />
-      {operandsJSON}
       <ComputationOutput computationOutputJSON={computationOutputJSON} />
     </div>
   );

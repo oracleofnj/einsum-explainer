@@ -1,15 +1,17 @@
 import React from "react";
-import { isErrorMessage, isSizedContraction } from "../types/einsum_typeguards";
+import { isErrorMessage, isSizedContraction, isContraction } from "../types/einsum_typeguards";
 import parseAndTypecheckJSON from "../utils/parseAndTypecheckJSON";
 
 type AxisLengthOutputProps = {
+  equationJSON: string;
   sizedExplanationJSON: string;
 };
 
-const AxisLengthsOutput = (props: AxisLengthOutputProps) => {
-  const { sizedExplanationJSON } = props;
+const AxisLengthsOutput = ({ equationJSON, sizedExplanationJSON }: AxisLengthOutputProps) => {
   let sizeErrorMessage;
   let outputSize;
+
+  const explanation = parseAndTypecheckJSON(equationJSON, isContraction, "validateAsJson");
 
   const sizedExplanation = parseAndTypecheckJSON(
     sizedExplanationJSON,
@@ -19,8 +21,39 @@ const AxisLengthsOutput = (props: AxisLengthOutputProps) => {
 
   if (isErrorMessage(sizedExplanation)) {
     sizeErrorMessage = sizedExplanation.Err;
+  } else if (isErrorMessage(explanation)) {
+    sizeErrorMessage = explanation.Err;
   } else {
-    outputSize = JSON.stringify(sizedExplanation.Ok.output_size);
+    // export type Contraction = {
+    //   operand_indices: string[];
+    //   output_indices: string[];
+    //   summation_indices: string[];
+    // };
+    const contraction = explanation.Ok;
+
+    // export type SizedContraction = {
+    //   contraction: Contraction;
+    //   output_size: OutputSize;
+    // };
+    // export type OutputSize = { [key: string]: number };
+    const outputMap = sizedExplanation.Ok.output_size;
+
+    outputSize = (
+      <div>
+        <div>
+          Output size: [{contraction.output_indices.join(", ")}] ={" "}
+          {JSON.stringify(contraction.output_indices.map(x => outputMap[x]))}
+        </div>
+        <div>
+          Summation index lengths:{" "}
+          {contraction.summation_indices.map(x => (
+            <span key={x}>
+              {x}: {outputMap[x]}
+            </span>
+          ))}
+        </div>
+      </div>
+    );
   }
 
   return isErrorMessage(sizedExplanation) ? (
@@ -31,7 +64,7 @@ const AxisLengthsOutput = (props: AxisLengthOutputProps) => {
   ) : (
     <>
       <p>The operands match the input and the sizes check out!</p>
-      <div>Output size: {outputSize}</div>
+      {outputSize}
     </>
   );
 };
