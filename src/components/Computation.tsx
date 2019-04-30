@@ -6,7 +6,7 @@ import { parseShapeString } from "../utils/parseShapeStrings";
 import ContentsInput from "./ContentsInput";
 import { isErrorMessage } from "../types/einsum_typeguards";
 import { parseDataString } from "../utils/parseDataString";
-import InputOutputRow from "./InputOutputRow";
+import InputOutputRow from "./layout/InputOutputRow";
 
 type ComputationProps = {
   equation: string;

@@ -1,6 +1,12 @@
 import React from "react";
-import { isErrorMessage, isSizedContraction, isContraction } from "../types/einsum_typeguards";
+import {
+  isErrorMessage,
+  isSizedContraction,
+  isContraction,
+  Result
+} from "../types/einsum_typeguards";
 import parseAndTypecheckJSON from "../utils/parseAndTypecheckJSON";
+import OutputColumn from "./layout/OutputColumn";
 
 type AxisLengthOutputProps = {
   equationJSON: string;
@@ -8,8 +14,7 @@ type AxisLengthOutputProps = {
 };
 
 const AxisLengthsOutput = ({ equationJSON, sizedExplanationJSON }: AxisLengthOutputProps) => {
-  let sizeErrorMessage;
-  let outputSize;
+  let output: Result<JSX.Element>;
 
   const explanation = parseAndTypecheckJSON(equationJSON, isContraction, "validateAsJson");
 
@@ -20,9 +25,9 @@ const AxisLengthsOutput = ({ equationJSON, sizedExplanationJSON }: AxisLengthOut
   );
 
   if (isErrorMessage(sizedExplanation)) {
-    sizeErrorMessage = sizedExplanation.Err;
+    output = sizedExplanation;
   } else if (isErrorMessage(explanation)) {
-    sizeErrorMessage = explanation.Err;
+    output = explanation;
   } else {
     // export type Contraction = {
     //   operand_indices: string[];
@@ -38,35 +43,27 @@ const AxisLengthsOutput = ({ equationJSON, sizedExplanationJSON }: AxisLengthOut
     // export type OutputSize = { [key: string]: number };
     const outputMap = sizedExplanation.Ok.output_size;
 
-    outputSize = (
-      <div>
+    output = {
+      Ok: (
         <div>
-          Output size: [{contraction.output_indices.join(", ")}] ={" "}
-          {JSON.stringify(contraction.output_indices.map(x => outputMap[x]))}
+          <div>
+            Output size: [{contraction.output_indices.join(", ")}] ={" "}
+            {JSON.stringify(contraction.output_indices.map(x => outputMap[x]))}
+          </div>
+          <div>
+            Summation index lengths:{" "}
+            {contraction.summation_indices.map(x => (
+              <span key={x}>
+                {x}: {outputMap[x]}
+              </span>
+            ))}
+          </div>
         </div>
-        <div>
-          Summation index lengths:{" "}
-          {contraction.summation_indices.map(x => (
-            <span key={x}>
-              {x}: {outputMap[x]}
-            </span>
-          ))}
-        </div>
-      </div>
-    );
+      )
+    };
   }
 
-  return isErrorMessage(sizedExplanation) ? (
-    <>
-      <p>The sizes don't work!</p>
-      <p>{sizeErrorMessage}</p>
-    </>
-  ) : (
-    <>
-      <p>The operands match the input and the sizes check out!</p>
-      {outputSize}
-    </>
-  );
+  return <OutputColumn output={output} />;
 };
 
-export default AxisLengthsOutput;
+export default React.memo(AxisLengthsOutput);

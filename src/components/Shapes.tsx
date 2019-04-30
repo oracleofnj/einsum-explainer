@@ -5,7 +5,7 @@ import AxisLengthsOutput from "./AxisLengthsOutput";
 import { parseShapeString } from "../utils/parseShapeStrings";
 import ShapesInput from "./ShapesInput";
 import { isErrorMessage } from "../types/einsum_typeguards";
-import InputOutputRow from "./InputOutputRow";
+import InputOutputRow from "./layout/InputOutputRow";
 
 type ShapesProps = {
   equation: string;

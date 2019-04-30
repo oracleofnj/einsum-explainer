@@ -1,9 +1,11 @@
 import React, { useReducer } from "react";
 import { reducer, initialState } from "../appstate/appState";
-import "./App.css";
 import Equation from "./Equation";
 import Shapes from "./Shapes";
 import Computation from "./Computation";
+
+import "./App.css";
+import "flexboxgrid";
 
 const EinsumExplainer = () => {
   const [appState, dispatch] = useReducer(reducer, initialState);

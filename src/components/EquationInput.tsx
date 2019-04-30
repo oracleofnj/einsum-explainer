@@ -1,5 +1,6 @@
 import React, { ChangeEvent } from "react";
 import { appActions, AppAction } from "../appstate/appState";
+import InputColumn from "./layout/InputColumn";
 
 type ExplainerInputProps = {
   equation: string;
@@ -12,9 +13,10 @@ const EquationInput = ({ equation, dispatch }: ExplainerInputProps) => {
   };
 
   return (
-    <p>
-      Equation: <input type="text" onChange={onEquationChange} value={equation} />
-    </p>
+    <InputColumn
+      prompt="Equation:"
+      control={<input type="text" onChange={onEquationChange} value={equation} />}
+    />
   );
 };
 

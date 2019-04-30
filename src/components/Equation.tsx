@@ -3,7 +3,7 @@ import { AppAction } from "../appstate/appState";
 import EquationInput from "./EquationInput";
 import { validateAsJson } from "../pkg/einsum";
 import EquationOutput from "./EquationOutput";
-import InputOutputRow from "./InputOutputRow";
+import InputOutputRow from "./layout/InputOutputRow";
 
 type EquationProps = {
   equation: string;

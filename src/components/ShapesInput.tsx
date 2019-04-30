@@ -1,5 +1,6 @@
 import React, { ChangeEvent } from "react";
 import { appActions, AppAction } from "../appstate/appState";
+import InputColumn from "./layout/InputColumn";
 
 type ShapesInputProps = {
   visibleSizes: number;
@@ -18,16 +19,15 @@ const ShapesInput = ({ operandShapes, visibleSizes, dispatch }: ShapesInputProps
   };
 
   return (
-    <div>
+    <>
       {shapes.map((data, index) => (
-        <div key={index}>
-          <span>
-            Shape of {String.fromCharCode(index + "A".charCodeAt(0))}:{" "}
-            <input type="text" onChange={makeOnShapeChange(index)} value={data} />
-          </span>
-        </div>
+        <InputColumn
+          key={index}
+          prompt={`Shape of ${String.fromCharCode(index + "A".charCodeAt(0))}:`}
+          control={<input type="text" onChange={makeOnShapeChange(index)} value={data} />}
+        />
       ))}
-    </div>
+    </>
   );
 };
 

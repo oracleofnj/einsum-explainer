@@ -1,5 +1,6 @@
 import React, { ChangeEvent } from "react";
 import { appActions, AppAction } from "../appstate/appState";
+import InputColumn from "./layout/InputColumn";
 
 type ContentsInputProps = {
   visibleSizes: number;
@@ -18,16 +19,14 @@ const ContentsInput = ({ operandContents, visibleSizes, dispatch }: ContentsInpu
   };
 
   return (
-    <div>
+    <>
       {contents.map((data, index) => (
-        <div key={index}>
-          <span>
-            Contents of {String.fromCharCode(index + "A".charCodeAt(0))}:{" "}
-            <input type="text" onChange={makeOnContentsChange(index)} value={data} />
-          </span>
-        </div>
+        <InputColumn
+          prompt={`Contents of ${String.fromCharCode(index + "A".charCodeAt(0))}:`}
+          control={<input type="text" onChange={makeOnContentsChange(index)} value={data} />}
+        />
       ))}
-    </div>
+    </>
   );
 };
 

@@ -4,6 +4,7 @@ import React from "react";
 import { isErrorMessage, isContraction } from "../types/einsum_typeguards";
 import makeLatexString from "../utils/makeLatexString";
 import parseAndTypecheckJSON from "../utils/parseAndTypecheckJSON";
+import OutputColumn from "./layout/OutputColumn";
 
 type EquationOutputProps = {
   explanationJSON: string;
@@ -11,31 +12,20 @@ type EquationOutputProps = {
 
 const EquationOutput = (props: EquationOutputProps) => {
   const { explanationJSON } = props;
-  let contractionErrorMessage;
-  let dangerousKatexHTML;
   const explanation = parseAndTypecheckJSON(explanationJSON, isContraction, "validateAsJson");
+  const output = isErrorMessage(explanation)
+    ? explanation
+    : {
+        Ok: (
+          <div
+            dangerouslySetInnerHTML={{
+              __html: renderToString(makeLatexString(explanation.Ok))
+            }}
+          />
+        )
+      };
 
-  if (isErrorMessage(explanation)) {
-    contractionErrorMessage = explanation.Err;
-  } else {
-    const contraction = explanation.Ok;
-    const latexString = makeLatexString(contraction);
-    dangerousKatexHTML = {
-      __html: renderToString(latexString)
-    };
-  }
-
-  return isErrorMessage(explanation) ? (
-    <>
-      <p>There was an error!</p>
-      <p>{contractionErrorMessage}</p>
-    </>
-  ) : (
-    <>
-      <p>Everything is cool!</p>
-      <div dangerouslySetInnerHTML={dangerousKatexHTML} />
-    </>
-  );
+  return <OutputColumn output={output} />;
 };
 
-export default EquationOutput;
+export default React.memo(EquationOutput);
