@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "5945a7530573bb0757a4d90dce2905ab",
+    "revision": "0f025ccc563102c27df978867d84eaf9",
     "url": "/einsum-explainer/index.html"
   },
   {
@@ -8,16 +8,16 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/einsum-explainer/static/css/2.61a00b32.chunk.css"
   },
   {
-    "revision": "3fb2166ac42dd0636972",
-    "url": "/einsum-explainer/static/css/main.86674015.chunk.css"
+    "revision": "1a30a132d06b20c28e9a",
+    "url": "/einsum-explainer/static/css/main.57f83505.chunk.css"
   },
   {
     "revision": "b2abf2d5cb2d607c365c",
     "url": "/einsum-explainer/static/js/2.bc3d43eb.chunk.js"
   },
   {
-    "revision": "3fb2166ac42dd0636972",
-    "url": "/einsum-explainer/static/js/main.7ed80b3e.chunk.js"
+    "revision": "1a30a132d06b20c28e9a",
+    "url": "/einsum-explainer/static/js/main.9833a4fc.chunk.js"
   },
   {
     "revision": "6151119c50a5170f042e",

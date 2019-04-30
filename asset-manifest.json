@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.css": "/einsum-explainer/static/css/main.86674015.chunk.css",
-    "main.js": "/einsum-explainer/static/js/main.7ed80b3e.chunk.js",
-    "main.js.map": "/einsum-explainer/static/js/main.7ed80b3e.chunk.js.map",
+    "main.css": "/einsum-explainer/static/css/main.57f83505.chunk.css",
+    "main.js": "/einsum-explainer/static/js/main.9833a4fc.chunk.js",
+    "main.js.map": "/einsum-explainer/static/js/main.9833a4fc.chunk.js.map",
     "runtime~main.js": "/einsum-explainer/static/js/runtime~main.ed721f28.js",
     "runtime~main.js.map": "/einsum-explainer/static/js/runtime~main.ed721f28.js.map",
     "static/css/2.61a00b32.chunk.css": "/einsum-explainer/static/css/2.61a00b32.chunk.css",
     "static/js/2.bc3d43eb.chunk.js": "/einsum-explainer/static/js/2.bc3d43eb.chunk.js",
     "static/js/2.bc3d43eb.chunk.js.map": "/einsum-explainer/static/js/2.bc3d43eb.chunk.js.map",
     "index.html": "/einsum-explainer/index.html",
-    "precache-manifest.d9ece0eb918878585ec1f4a5751b320e.js": "/einsum-explainer/precache-manifest.d9ece0eb918878585ec1f4a5751b320e.js",
+    "precache-manifest.be583e9139b7f635e99818a7a0a20dab.js": "/einsum-explainer/precache-manifest.be583e9139b7f635e99818a7a0a20dab.js",
     "service-worker.js": "/einsum-explainer/service-worker.js",
     "static/css/2.61a00b32.chunk.css.map": "/einsum-explainer/static/css/2.61a00b32.chunk.css.map",
-    "static/css/main.86674015.chunk.css.map": "/einsum-explainer/static/css/main.86674015.chunk.css.map",
+    "static/css/main.57f83505.chunk.css.map": "/einsum-explainer/static/css/main.57f83505.chunk.css.map",
     "static/media/katex.min.css": "/einsum-explainer/static/media/KaTeX_Typewriter-Regular.e52da442.woff"
   }
 }
