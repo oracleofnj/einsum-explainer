@@ -52,11 +52,7 @@ const AxisLengthsOutput = ({ equationJSON, sizedExplanationJSON }: AxisLengthOut
           </div>
           <div>
             Summation index lengths:{" "}
-            {contraction.summation_indices.map(x => (
-              <span key={x}>
-                {x}: {outputMap[x]}
-              </span>
-            ))}
+            {contraction.summation_indices.map(x => `${x}: ${outputMap[x]}`).join("; ")}
           </div>
         </div>
       )

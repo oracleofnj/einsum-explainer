@@ -10,7 +10,7 @@ type OutputColumnProps = {
 export default function OutputColumn({ output }: OutputColumnProps) {
   return (
     <div className="row">
-      <div className="col-xs-3">
+      <div className="col-xs-2 col-xs-offset-2 col-md-offset-0 col-md-1">
         {isErrorMessage(output) ? (
           <FontAwesomeIcon
             title="Something went wrong!"
@@ -27,7 +27,9 @@ export default function OutputColumn({ output }: OutputColumnProps) {
           />
         )}
       </div>
-      <div className="col-xs-9">{isErrorMessage(output) ? output.Err : output.Ok}</div>
+      <div className="col-xs-8 col-md-11">
+        {isErrorMessage(output) ? output.Err : output.Ok}
+      </div>
     </div>
   );
 }

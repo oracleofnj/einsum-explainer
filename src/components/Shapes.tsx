@@ -4,7 +4,7 @@ import { validateAndSizeFromShapesAsStringAsJson, validateAsJson } from "../pkg/
 import AxisLengthsOutput from "./AxisLengthsOutput";
 import { parseShapeString } from "../utils/parseShapeStrings";
 import ShapesInput from "./ShapesInput";
-import { isErrorMessage } from "../types/einsum_typeguards";
+import { isErrorMessage, ErrorMessage } from "../types/einsum_typeguards";
 import InputOutputRow from "./layout/InputOutputRow";
 
 type ShapesProps = {
@@ -21,7 +21,12 @@ const Shapes = ({ equation, visibleSizes, operandShapes, dispatch }: ShapesProps
   let sizedExplanationJSON;
   if (shapeArrays.some(isErrorMessage)) {
     sizedExplanationJSON = JSON.stringify({
-      Err: JSON.stringify(shapeArrays.filter(isErrorMessage))
+      Err: JSON.stringify(
+        shapeArrays
+          .map((val, idx) => ({ val, idx }))
+          .filter(({ val }) => isErrorMessage(val))
+          .map(({ val, idx }) => ({ Tensor: idx, Error: (val as ErrorMessage).Err }))
+      )
     });
   } else {
     sizedExplanationJSON = validateAndSizeFromShapesAsStringAsJson(
