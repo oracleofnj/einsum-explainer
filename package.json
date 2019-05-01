@@ -20,6 +20,7 @@
   },
   "devDependencies": {
     "@types/katex": "^0.10.1",
+    "@types/webpack-env": "^1.13.9",
     "gh-pages": "^2.0.1",
     "react-scripts": "3.0.0",
     "tslint": "^5.16.0",

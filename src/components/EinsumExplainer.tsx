@@ -1,14 +1,15 @@
-import React, { useReducer } from "react";
-import { reducer, initialState } from "../appstate/appState";
+import React from "react";
+import { AppState, AppAction } from "../appstate/appState";
 import Equation from "./Equation";
 import Shapes from "./Shapes";
 import Computation from "./Computation";
 
-import "./App.css";
-import "flexboxgrid";
+type EinsumExplainerProps = {
+  appState: AppState;
+  dispatch: React.Dispatch<AppAction>;
+};
 
-const EinsumExplainer = () => {
-  const [appState, dispatch] = useReducer(reducer, initialState);
+const EinsumExplainer = ({ appState, dispatch }: EinsumExplainerProps) => {
   const { equation, visibleSizes, operandContents, operandShapes } = appState;
 
   return (
