@@ -1,23 +1,23 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "fe73083d64cd796e27616f29d9c5878e",
+    "revision": "54139f1cba206402ed5635249848e466",
     "url": "/einsum-explainer/index.html"
   },
   {
-    "revision": "b2abf2d5cb2d607c365c",
+    "revision": "9364afd63fa8bc232f62",
     "url": "/einsum-explainer/static/css/2.61a00b32.chunk.css"
   },
   {
-    "revision": "bcb57e51fd94e3e26362",
+    "revision": "2c39413f0927aa271f77",
     "url": "/einsum-explainer/static/css/main.57f83505.chunk.css"
   },
   {
-    "revision": "b2abf2d5cb2d607c365c",
-    "url": "/einsum-explainer/static/js/2.bc3d43eb.chunk.js"
+    "revision": "9364afd63fa8bc232f62",
+    "url": "/einsum-explainer/static/js/2.f2287388.chunk.js"
   },
   {
-    "revision": "bcb57e51fd94e3e26362",
-    "url": "/einsum-explainer/static/js/main.8110a18a.chunk.js"
+    "revision": "2c39413f0927aa271f77",
+    "url": "/einsum-explainer/static/js/main.3a61d15c.chunk.js"
   },
   {
     "revision": "6151119c50a5170f042e",
