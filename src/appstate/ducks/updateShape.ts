@@ -28,12 +28,11 @@ function actionCreator(index: number, shape: string): UpdateShapeAction {
   };
 }
 
-function getContents(operandVectors: number[][], index: number, shape: number[]) {
+function getContents(v: number[], shape: number[]) {
   let totalLength = 1;
   for (const s of shape) {
     totalLength *= s;
   }
-  const v = operandVectors[index];
   if (!(v instanceof Array)) {
     return Array(totalLength).fill(0);
   }
@@ -52,36 +51,30 @@ function reducer(state: AppState, action: AppAction): AppState {
   if (typeguard(action)) {
     const { index, shape } = action;
     const data = parseShapeString(shape);
-    if (isErrorMessage(data)) {
-      return {
-        ...state,
-        operandShapes: [
-          ...state.operandShapes.slice(0, index),
-          shape,
-          ...state.operandShapes.slice(index + 1)
-        ]
-      };
-    } else {
-      const newContents = getContents(state.operandVectors, index, data.Ok);
+    const oldOperand = state.operandStates[index];
+    const { contentsVector } = oldOperand;
+    let { contentsStr } = oldOperand;
+    if (!isErrorMessage(data)) {
       const newNDArray = parseOutput({
         shape: data.Ok,
-        contents: newContents
+        contents: getContents(contentsVector, data.Ok)
       });
-
-      return {
-        ...state,
-        operandContents: [
-          ...state.operandContents.slice(0, index),
-          JSON.stringify(newNDArray),
-          ...state.operandContents.slice(index + 1)
-        ],
-        operandShapes: [
-          ...state.operandShapes.slice(0, index),
-          shape,
-          ...state.operandShapes.slice(index + 1)
-        ]
-      };
+      contentsStr = JSON.stringify(newNDArray);
     }
+
+    return {
+      ...state,
+      operandStates: [
+        ...state.operandStates.slice(0, index),
+        {
+          ...oldOperand,
+          shapeStr: shape,
+          contentsStr,
+          contentsVector
+        },
+        ...state.operandStates.slice(index + 1)
+      ]
+    };
   } else {
     throw new TypeError(JSON.stringify({ reducer: UPDATE_SHAPE, action }));
   }

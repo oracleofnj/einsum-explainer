@@ -10,7 +10,7 @@ type EinsumExplainerProps = {
 };
 
 const EinsumExplainer = ({ appState, dispatch }: EinsumExplainerProps) => {
-  const { equation, visibleSizes, operandContents, operandShapes } = appState;
+  const { equation, visibleSizes, operandStates } = appState;
 
   return (
     <div className="wrap container-fluid">
@@ -19,14 +19,14 @@ const EinsumExplainer = ({ appState, dispatch }: EinsumExplainerProps) => {
         equation={equation}
         dispatch={dispatch}
         visibleSizes={visibleSizes}
-        operandShapes={operandShapes}
+        operandShapes={operandStates.map(x => x.shapeStr)}
       />
       <Computation
         equation={equation}
         dispatch={dispatch}
         visibleSizes={visibleSizes}
-        operandContents={operandContents}
-        operandShapes={operandShapes}
+        operandContents={operandStates.map(x => x.contentsStr)}
+        operandShapes={operandStates.map(x => x.shapeStr)}
       />
     </div>
   );

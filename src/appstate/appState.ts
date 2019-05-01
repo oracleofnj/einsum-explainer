@@ -4,6 +4,7 @@ import updateContentsDuck, { UpdateContentsAction } from "./ducks/updateContents
 import addShapeDuck, { AddShapeAction } from "./ducks/addShape";
 import makeReducer from "./makeReducer";
 import range from "../utils/range";
+import makeOperand from "./makeOperand";
 
 // What is the state of the app?
 // (1) The string the user entered
@@ -23,23 +24,26 @@ import range from "../utils/range";
 // (5) Add the action to "const appActions"
 // (6) Add the duck to the call to makeReducer()
 
+export type operandState = {
+  shapeStr: string;
+  contentsStr: string;
+  contentsVector: number[];
+};
+
 export type AppState = {
   equation: string;
   visibleSizes: number;
-  operandShapes: string[];
-  operandContents: string[];
-  operandVectors: number[][];
+  operandStates: operandState[];
 };
 
 const initialState: AppState = {
   equation: "ij,jk->ik",
   visibleSizes: 2,
-  operandShapes: ["(2,3)", "(3,5)"].concat(Array(254).fill("()")),
-  operandContents: [
-    JSON.stringify([range(3), range(3, 6)]),
-    JSON.stringify([range(0, 50, 10), range(50, 100, 10), range(100, 150, 10)])
-  ].concat(Array(254).fill("[]")),
-  operandVectors: [range(6), range(0, 150, 10)].concat(Array(254).fill([]))
+  operandStates: [
+    makeOperand([2, 3], 0, 1),
+    makeOperand([3, 5], 0, 10),
+    ...Array(254).fill(makeOperand([]))
+  ]
 };
 
 export type AppAction =
