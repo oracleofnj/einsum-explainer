@@ -1,10 +1,9 @@
 import updateEquationDuck, { UpdateEquationAction } from "./ducks/updateEquation";
 import updateShapeDuck, { UpdateShapeAction } from "./ducks/updateShape";
 import updateContentsDuck, { UpdateContentsAction } from "./ducks/updateContents";
-import addShapeDuck, { AddShapeAction } from "./ducks/addShape";
 import makeReducer from "./makeReducer";
-import range from "../utils/range";
-import makeOperand from "./makeOperand";
+import presets, { getState } from "./presets";
+import loadPresetDuck, { LoadPresetAction } from "./ducks/loadPreset";
 
 // What is the state of the app?
 // (1) The string the user entered
@@ -36,30 +35,22 @@ export type AppState = {
   operandStates: operandState[];
 };
 
-const initialState: AppState = {
-  equation: "ij,jk->ik",
-  visibleSizes: 2,
-  operandStates: [
-    makeOperand([2, 3], 0, 1),
-    makeOperand([3, 5], 0, 10),
-    ...Array(254).fill(makeOperand([]))
-  ]
-};
+const initialState: AppState = getState(presets.matrixMultiplication);
 
 export type AppAction =
-  | AddShapeAction
   | UpdateEquationAction
   | UpdateShapeAction
-  | UpdateContentsAction;
+  | UpdateContentsAction
+  | LoadPresetAction;
 
 const appActions = {
-  addShape: addShapeDuck.actionCreator,
   updateEquation: updateEquationDuck.actionCreator,
   updateShape: updateShapeDuck.actionCreator,
-  updateContents: updateContentsDuck.actionCreator
+  updateContents: updateContentsDuck.actionCreator,
+  loadPreset: loadPresetDuck.actionCreator
 };
 const reducer = makeReducer([
-  addShapeDuck,
+  loadPresetDuck,
   updateEquationDuck,
   updateShapeDuck,
   updateContentsDuck

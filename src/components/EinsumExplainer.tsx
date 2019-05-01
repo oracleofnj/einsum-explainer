@@ -3,6 +3,7 @@ import { AppState, AppAction } from "../appstate/appState";
 import Equation from "./Equation";
 import Shapes from "./Shapes";
 import Computation from "./Computation";
+import Presets from "./Presets";
 
 type EinsumExplainerProps = {
   appState: AppState;
@@ -14,6 +15,7 @@ const EinsumExplainer = ({ appState, dispatch }: EinsumExplainerProps) => {
 
   return (
     <div className="wrap container-fluid">
+      <Presets dispatch={dispatch} />
       <Equation equation={equation} dispatch={dispatch} />
       <Shapes
         equation={equation}

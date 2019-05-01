@@ -1,6 +1,5 @@
 import range from "../utils/range";
 import parseOutput from "../utils/parseOutputString";
-import { NDArray } from "../types/einsum_typeguards";
 import { operandState } from "./appState";
 
 export default function makeOperand(

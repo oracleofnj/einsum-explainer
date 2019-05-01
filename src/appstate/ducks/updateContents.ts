@@ -2,7 +2,6 @@ import { AppState, AppAction } from "../appState";
 import { AnyAction } from "../makeReducer";
 import { parseDataString } from "../../utils/parseDataString";
 import { isErrorMessage, getShape } from "../../types/einsum_typeguards";
-import { stat } from "fs";
 
 export interface UpdateContentsAction extends AnyAction {
   index: number;
