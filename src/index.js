@@ -3,10 +3,10 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./components/App";
 import * as serviceWorker from "./utils/serviceWorker";
-import init from "./pkg/einsum.js";
+import init from "./pkg/einsum_wasm.js";
 
 (async function run() {
-  await init("./pkg/einsum_bg.wasm");
+  await init("./pkg/einsum_wasm_bg.wasm");
   ReactDOM.render(<App />, document.getElementById("root"));
 })();
 

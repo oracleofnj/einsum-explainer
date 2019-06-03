@@ -1,4 +1,4 @@
-import { validateAsJson } from "../../pkg/einsum";
+import { validateAsJson } from "../../pkg/einsum_wasm";
 import { isContraction, isErrorMessage } from "../../types/einsum_typeguards";
 import { AppState, AppAction } from "../appState";
 import { AnyAction } from "../makeReducer";

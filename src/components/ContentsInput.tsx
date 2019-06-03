@@ -22,6 +22,7 @@ const ContentsInput = ({ operandContents, visibleSizes, dispatch }: ContentsInpu
     <>
       {contents.map((data, index) => (
         <InputColumn
+          key={index}
           prompt={`Contents of ${String.fromCharCode(index + "A".charCodeAt(0))}:`}
           control={<input type="text" onChange={makeOnContentsChange(index)} value={data} />}
         />

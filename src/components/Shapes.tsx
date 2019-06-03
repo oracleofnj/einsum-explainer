@@ -1,6 +1,6 @@
 import React from "react";
 import { AppAction } from "../appstate/appState";
-import { validateAndSizeFromShapesAsStringAsJson, validateAsJson } from "../pkg/einsum";
+import { validateAndSizeFromShapesAsStringAsJson, validateAsJson } from "../pkg/einsum_wasm";
 import AxisLengthsOutput from "./AxisLengthsOutput";
 import { parseShapeString } from "../utils/parseShapeStrings";
 import ShapesInput from "./ShapesInput";

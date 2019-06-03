@@ -85,7 +85,7 @@ export function isNDArray(r: any): r is NDArray {
 }
 
 export type Contraction = {
-  operand_indices: string[];
+  operand_indices: string[][];
   output_indices: string[];
   summation_indices: string[];
 };
@@ -94,6 +94,7 @@ export function isContraction(r: object): r is Contraction {
   return (
     r.hasOwnProperty("operand_indices") &&
     (r as Contraction).operand_indices instanceof Array &&
+    (r as Contraction).operand_indices.every(x => x instanceof Array) &&
     r.hasOwnProperty("output_indices") &&
     r.hasOwnProperty("summation_indices")
   );

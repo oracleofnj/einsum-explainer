@@ -1,7 +1,7 @@
 import React from "react";
 import { AppAction } from "../appstate/appState";
 import EquationInput from "./EquationInput";
-import { validateAsJson } from "../pkg/einsum";
+import { validateAsJson } from "../pkg/einsum_wasm";
 import EquationOutput from "./EquationOutput";
 import InputOutputRow from "./layout/InputOutputRow";
 

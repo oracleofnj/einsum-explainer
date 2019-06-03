@@ -1,6 +1,6 @@
 import React from "react";
 import { AppAction } from "../appstate/appState";
-import { slowEinsumAsJson } from "../pkg/einsum";
+import { slowEinsumAsJson } from "../pkg/einsum_wasm";
 import ComputationOutput from "./ComputationOutput";
 import { parseShapeString } from "../utils/parseShapeStrings";
 import ContentsInput from "./ContentsInput";
