@@ -46,7 +46,27 @@ pub fn validate_and_size_from_shapes_as_string(
     }
 }
 
-pub fn slow_einsum_with_flattened_operands<A: LinalgScalar>(
+pub fn einsum_path_with_flattened_operands<A: LinalgScalar>(
+    input_string: &str,
+    flattened_operands: &[&FlattenedOperand<A>],
+) -> Result<EinsumPath<A>, &'static str> {
+    let maybe_operands = flattened_operands
+        .iter()
+        .map(|x| unflatten_operand(*x))
+        .collect::<Result<Vec<_>, _>>();
+    match maybe_operands {
+        Err(_) => Err("Could not unpack one or more flattened operands"),
+        Ok(operands) => {
+            let mut operand_refs: Vec<&dyn ArrayLike<A>> = Vec::new();
+            for operand in operands.iter() {
+                operand_refs.push(operand);
+            }
+            einsum_path(input_string, &operand_refs, OptimizationMethod::Naive)
+        }
+    }
+}
+
+pub fn einsum_with_flattened_operands<A: LinalgScalar>(
     input_string: &str,
     flattened_operands: &[&FlattenedOperand<A>],
 ) -> Result<ArrayD<A>, &'static str> {
@@ -66,7 +86,25 @@ pub fn slow_einsum_with_flattened_operands<A: LinalgScalar>(
     }
 }
 
-pub fn slow_einsum_with_flattened_operands_as_string_generic<A>(
+pub fn einsum_path_with_flattened_operands_as_string_generic<A>(
+    input_string: &str,
+    flattened_operands_as_string: &str,
+) -> Result<EinsumPath<A>, &'static str>
+where
+    A: LinalgScalar + serde::de::DeserializeOwned,
+{
+    let maybe_flattened_operands =
+        serde_json::from_str::<FlattenedOperandList<A>>(flattened_operands_as_string);
+    match maybe_flattened_operands {
+        Err(_) => Err("Could not parse flattened operands"),
+        Ok(FlattenedOperandList(owned_flattened_operands)) => {
+            let flattened_operands: Vec<_> = owned_flattened_operands.iter().map(|x| x).collect();
+            einsum_path_with_flattened_operands(input_string, &flattened_operands)
+        }
+    }
+}
+
+pub fn einsum_with_flattened_operands_as_string_generic<A>(
     input_string: &str,
     flattened_operands_as_string: &str,
 ) -> Result<ArrayD<A>, &'static str>
@@ -79,16 +117,27 @@ where
         Err(_) => Err("Could not parse flattened operands"),
         Ok(FlattenedOperandList(owned_flattened_operands)) => {
             let flattened_operands: Vec<_> = owned_flattened_operands.iter().map(|x| x).collect();
-            slow_einsum_with_flattened_operands(input_string, &flattened_operands)
+            einsum_with_flattened_operands(input_string, &flattened_operands)
         }
     }
 }
 
-pub fn slow_einsum_with_flattened_operands_as_flattened_json_string(
+pub fn einsum_path_with_flattened_operands_as_flattened_json_string(
+    input_string: &str,
+    flattened_operands_as_string: &str,
+) -> Result<String, &'static str> {
+    let maybe_result = einsum_path_with_flattened_operands_as_string_generic::<f64>(
+        input_string,
+        flattened_operands_as_string,
+    )?;
+    Ok(format!("{:?}", maybe_result))
+}
+
+pub fn einsum_with_flattened_operands_as_flattened_json_string(
     input_string: &str,
     flattened_operands_as_string: &str,
 ) -> Result<FlattenedOperand<f64>, &'static str> {
-    let maybe_result = slow_einsum_with_flattened_operands_as_string_generic::<f64>(
+    let maybe_result = einsum_with_flattened_operands_as_string_generic::<f64>(
         input_string,
         flattened_operands_as_string,
     )?;
@@ -158,15 +207,34 @@ pub fn validate_and_size_from_shapes_as_string_as_json(
 }
 
 #[derive(Debug, Serialize)]
+pub struct EinsumPathResult(Result<String, &'static str>);
+
+#[wasm_bindgen(js_name = einsumPathAsJson)]
+pub fn einsum_path_with_flattened_operands_as_json_string_as_json(
+    input_string: &str,
+    flattened_operands_as_string: &str,
+) -> String {
+    match serde_json::to_string(&EinsumPathResult(
+        einsum_path_with_flattened_operands_as_flattened_json_string(
+            input_string,
+            flattened_operands_as_string,
+        ),
+    )) {
+        Ok(s) => s,
+        _ => String::from("{\"Err\": \"Serialization Error\"}"),
+    }
+}
+
+#[derive(Debug, Serialize)]
 pub struct EinsumResult<T>(Result<FlattenedOperand<T>, &'static str>);
 
 #[wasm_bindgen(js_name = slowEinsumAsJson)]
-pub fn slow_einsum_with_flattened_operands_as_json_string_as_json(
+pub fn einsum_with_flattened_operands_as_json_string_as_json(
     input_string: &str,
     flattened_operands_as_string: &str,
 ) -> String {
     match serde_json::to_string(&EinsumResult(
-        slow_einsum_with_flattened_operands_as_flattened_json_string(
+        einsum_with_flattened_operands_as_flattened_json_string(
             input_string,
             flattened_operands_as_string,
         ),

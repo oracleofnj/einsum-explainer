@@ -5,11 +5,12 @@ import parseAndTypecheckJSON from "../utils/parseAndTypecheckJSON";
 import OutputColumn from "./layout/OutputColumn";
 
 type ComputationOutputProps = {
+  einsumPathJSON: string;
   computationOutputJSON: string;
 };
 
 const ComputationOutput = (props: ComputationOutputProps) => {
-  const { computationOutputJSON } = props;
+  const { computationOutputJSON, einsumPathJSON } = props;
   const computationOutput = parseAndTypecheckJSON(
     computationOutputJSON,
     isFlattenedOperand,
@@ -22,6 +23,7 @@ const ComputationOutput = (props: ComputationOutputProps) => {
           <>
             Einsum Result:{" "}
             <div>{JSON.stringify(parseOutput(computationOutput.Ok), null, 2)}</div>
+            <div>Einsum Path: {einsumPathJSON}</div>
           </>
         )
       };

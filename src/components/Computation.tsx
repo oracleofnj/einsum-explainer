@@ -1,6 +1,6 @@
 import React from "react";
 import { AppAction } from "../appstate/appState";
-import { slowEinsumAsJson } from "../pkg/einsum_wasm";
+import { slowEinsumAsJson, einsumPathAsJson } from "../pkg/einsum_wasm";
 import ComputationOutput from "./ComputationOutput";
 import { parseShapeString } from "../utils/parseShapeStrings";
 import ContentsInput from "./ContentsInput";
@@ -43,6 +43,7 @@ const Computation = ({
   }
 
   const operandsJSON = JSON.stringify(operands);
+  const einsumPathJSON = einsumPathAsJson(equation, operandsJSON);
   const computationOutputJSON = slowEinsumAsJson(equation, operandsJSON);
 
   return (
@@ -54,7 +55,12 @@ const Computation = ({
           operandContents={operandContents}
         />
       }
-      output={<ComputationOutput computationOutputJSON={computationOutputJSON} />}
+      output={
+        <ComputationOutput
+          computationOutputJSON={computationOutputJSON}
+          einsumPathJSON={einsumPathJSON}
+        />
+      }
     />
   );
 };
