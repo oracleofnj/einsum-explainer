@@ -15,6 +15,12 @@ export function validateAndSizeFromShapesAsStringAsJson(input_string: string, op
 * @param {string} flattened_operands_as_string 
 * @returns {string} 
 */
+export function einsumPathAsJson(input_string: string, flattened_operands_as_string: string): string;
+/**
+* @param {string} input_string 
+* @param {string} flattened_operands_as_string 
+* @returns {string} 
+*/
 export function slowEinsumAsJson(input_string: string, flattened_operands_as_string: string): string;
 
 /**
@@ -25,5 +31,5 @@ export function slowEinsumAsJson(input_string: string, flattened_operands_as_str
 *
 * @returns {Promise<any>}
 */
-export function init (module_or_path: RequestInfo | BufferSource | WebAssembly.Module): Promise<any>;
+export default function init (module_or_path: RequestInfo | BufferSource | WebAssembly.Module): Promise<any>;
         
