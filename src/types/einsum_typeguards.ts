@@ -133,3 +133,169 @@ export function isFlattenedOperand(r: object): r is FlattenedOperand {
     isNumberArray((r as FlattenedOperand).contents)
   );
 }
+
+export type SingletonOrder = {
+  Singleton: SizedContraction;
+};
+
+export function isSingletonOrder(r: object): r is SingletonOrder {
+  return r.hasOwnProperty("Singleton") && isSizedContraction((r as SingletonOrder).Singleton);
+}
+
+export type OperandNumberInput = {
+  Input: number;
+};
+
+export function isOperandNumberInput(r: object): r is OperandNumberInput {
+  return r.hasOwnProperty("Input") && typeof (r as OperandNumberInput).Input === "number";
+}
+
+export type OperandNumberIntermediate = {
+  IntermediateResult: number;
+};
+
+export function isOperandNumberIntermediate(r: object): r is OperandNumberIntermediate {
+  return (
+    r.hasOwnProperty("IntermediateResult") &&
+    typeof (r as OperandNumberIntermediate).IntermediateResult === "number"
+  );
+}
+
+export type OperandNumber = OperandNumberInput | OperandNumberIntermediate;
+
+export function isOperandNumber(r: object): r is OperandNumber {
+  return isOperandNumberInput(r) || isOperandNumberIntermediate(r);
+}
+
+export type OperandNumPair = {
+  lhs: OperandNumber;
+  rhs: OperandNumber;
+};
+
+export function isOperandNumPair(r: object): r is OperandNumPair {
+  return (
+    r.hasOwnProperty("lhs") &&
+    isOperandNumber((r as OperandNumPair).lhs) &&
+    r.hasOwnProperty("rhs") &&
+    isOperandNumber((r as OperandNumPair).rhs)
+  );
+}
+
+export type OrderPair = {
+  sized_contraction: SizedContraction;
+  operand_nums: OperandNumPair;
+};
+
+export function isOrderPair(r: object): r is OrderPair {
+  return (
+    r.hasOwnProperty("sized_contraction") &&
+    isSizedContraction((r as OrderPair).sized_contraction) &&
+    r.hasOwnProperty("operand_nums") &&
+    isOperandNumPair((r as OrderPair).operand_nums)
+  );
+}
+
+export type PairsOrder = {
+  Pairs: OrderPair[];
+};
+
+export function isPairsOrder(r: object): r is PairsOrder {
+  return (
+    r.hasOwnProperty("Pairs") &&
+    (r as PairsOrder).Pairs instanceof Array &&
+    (r as PairsOrder).Pairs.every(isOrderPair)
+  );
+}
+
+export type ContractionOrder = SingletonOrder | PairsOrder;
+
+export function isContractionOrder(r: object): r is ContractionOrder {
+  return isSingletonOrder(r) || isPairsOrder(r);
+}
+
+export type SingletonSteps = {
+  SingletonContraction: {
+    method: string;
+  };
+};
+
+export function isSingletonSteps(r: object): r is SingletonSteps {
+  return (
+    r.hasOwnProperty("SingletonContraction") &&
+    typeof (r as SingletonSteps).SingletonContraction === "object" &&
+    (r as SingletonSteps).SingletonContraction.hasOwnProperty("method") &&
+    typeof (r as SingletonSteps).SingletonContraction.method === "string"
+  );
+}
+
+export type SimplificationMethod = {
+  method: string;
+  new_indices: string[];
+  einsum_string: string;
+};
+
+export function isSimplificationMethod(r: object): r is SimplificationMethod {
+  return (
+    r.hasOwnProperty("method") &&
+    typeof (r as SimplificationMethod).method === "string" &&
+    r.hasOwnProperty("new_indices") &&
+    (r as SimplificationMethod).new_indices instanceof Array &&
+    (r as SimplificationMethod).new_indices.every(x => typeof x === "string") &&
+    r.hasOwnProperty("einsum_string") &&
+    typeof (r as SimplificationMethod).einsum_string === "string"
+  );
+}
+
+export type PairStep = {
+  lhs_simplification: SimplificationMethod | null;
+  rhs_simplification: SimplificationMethod | null;
+  method: string;
+  simplified_einsum_string: string;
+};
+
+export function isPairStep(r: object): r is PairStep {
+  return (
+    r.hasOwnProperty("lhs_simplification") &&
+    ((r as PairStep).lhs_simplification === null ||
+      isSimplificationMethod((r as PairStep).lhs_simplification as object)) &&
+    r.hasOwnProperty("rhs_simplification") &&
+    ((r as PairStep).rhs_simplification === null ||
+      isSimplificationMethod((r as PairStep).rhs_simplification as object)) &&
+    r.hasOwnProperty("method") &&
+    typeof (r as PairStep).method === "string" &&
+    r.hasOwnProperty("simplified_einsum_string") &&
+    typeof (r as PairStep).simplified_einsum_string === "string"
+  );
+}
+
+export type PairSteps = {
+  PairContractions: PairStep[];
+};
+
+export function isPairSteps(r: object): r is PairSteps {
+  return (
+    r.hasOwnProperty("PairContractions") &&
+    (r as PairSteps).PairContractions instanceof Array &&
+    (r as PairSteps).PairContractions.every(isPairStep)
+  );
+}
+
+export type PathSteps = SingletonSteps | PairSteps;
+
+export function isPathSteps(r: object): r is PathSteps {
+  return isSingletonSteps(r) || isPairSteps(r);
+}
+
+export type EinsumPath = {
+  contraction_order: ContractionOrder;
+  steps: PathSteps;
+};
+
+export function isEinsumPath(r: object): r is EinsumPath {
+  return (
+    r.hasOwnProperty("contraction_order") &&
+    isContractionOrder((r as EinsumPath).contraction_order) &&
+    r.hasOwnProperty("steps") &&
+    isPathSteps((r as EinsumPath).steps)
+  );
+}

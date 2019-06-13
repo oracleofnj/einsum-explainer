@@ -2,7 +2,6 @@ use ndarray::prelude::*;
 use ndarray::LinalgScalar;
 use ndarray_einsum_beta::*;
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
 use wasm_bindgen::prelude::*;
 
 //////// Versions that accept strings for WASM interop below here ////
@@ -125,12 +124,11 @@ where
 pub fn einsum_path_with_flattened_operands_as_flattened_json_string(
     input_string: &str,
     flattened_operands_as_string: &str,
-) -> Result<String, &'static str> {
-    let maybe_result = einsum_path_with_flattened_operands_as_string_generic::<f64>(
+) -> Result<EinsumPath<f64>, &'static str> {
+    einsum_path_with_flattened_operands_as_string_generic::<f64>(
         input_string,
         flattened_operands_as_string,
-    )?;
-    Ok(format!("{:?}", maybe_result))
+    )
 }
 
 pub fn einsum_with_flattened_operands_as_flattened_json_string(
@@ -145,23 +143,13 @@ pub fn einsum_with_flattened_operands_as_flattened_json_string(
 }
 
 ////////////////////////// WASM stuff below here ///////////////////////
-#[derive(Serialize)]
-#[serde(remote = "Contraction")]
-struct ContractionDef {
-    pub operand_indices: Vec<Vec<char>>,
-    pub output_indices: Vec<char>,
-    pub summation_indices: Vec<char>,
-}
 
 #[derive(Debug, Serialize)]
-pub struct ContractionWrapper(#[serde(with = "ContractionDef")] Contraction);
-
-#[derive(Debug, Serialize)]
-pub struct ContractionResult(Result<ContractionWrapper, &'static str>);
+pub struct ContractionResult(Result<Contraction, &'static str>);
 
 fn wrap_validate(input_string: &str) -> ContractionResult {
     match validate(input_string) {
-        Ok(result) => ContractionResult(Ok(ContractionWrapper(result))),
+        Ok(result) => ContractionResult(Ok(result)),
         Err(e) => ContractionResult(Err(e)),
     }
 }
@@ -174,23 +162,12 @@ pub fn validate_as_json(input_string: &str) -> String {
     }
 }
 
-#[derive(Serialize)]
-#[serde(remote = "SizedContraction")]
-struct SizedContractionDef {
-    #[serde(with = "ContractionDef")]
-    contraction: Contraction,
-    output_size: HashMap<char, usize>,
-}
-
 #[derive(Debug, Serialize)]
-pub struct SizedContractionWrapper(#[serde(with = "SizedContractionDef")] SizedContraction);
-
-#[derive(Debug, Serialize)]
-pub struct SizedContractionResult(Result<SizedContractionWrapper, &'static str>);
+pub struct SizedContractionResult(Result<SizedContraction, &'static str>);
 
 fn wrap_validate_and_size(input_string: &str, operand_shapes: &str) -> SizedContractionResult {
     match validate_and_size_from_shapes_as_string(input_string, operand_shapes) {
-        Ok(result) => SizedContractionResult(Ok(SizedContractionWrapper(result))),
+        Ok(result) => SizedContractionResult(Ok(result)),
         Err(e) => SizedContractionResult(Err(e)),
     }
 }
@@ -207,7 +184,7 @@ pub fn validate_and_size_from_shapes_as_string_as_json(
 }
 
 #[derive(Debug, Serialize)]
-pub struct EinsumPathResult(Result<String, &'static str>);
+pub struct EinsumPathResult<T>(Result<EinsumPath<T>, &'static str>);
 
 #[wasm_bindgen(js_name = einsumPathAsJson)]
 pub fn einsum_path_with_flattened_operands_as_json_string_as_json(
