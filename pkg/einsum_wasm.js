@@ -151,16 +151,19 @@ __exports.validateAndSizeFromShapesAsStringAsJson = validateAndSizeFromShapesAsS
 /**
 * @param {string} input_string
 * @param {string} flattened_operands_as_string
+* @param {string} optimization_method
 * @returns {string}
 */
-export function einsumPathAsJson(input_string, flattened_operands_as_string) {
+export function einsumPathAsJson(input_string, flattened_operands_as_string, optimization_method) {
     const ptr0 = passStringToWasm(input_string);
     const len0 = WASM_VECTOR_LEN;
     const ptr1 = passStringToWasm(flattened_operands_as_string);
     const len1 = WASM_VECTOR_LEN;
+    const ptr2 = passStringToWasm(optimization_method);
+    const len2 = WASM_VECTOR_LEN;
     const retptr = globalArgumentPtr();
     try {
-        wasm.einsumPathAsJson(retptr, ptr0, len0, ptr1, len1);
+        wasm.einsumPathAsJson(retptr, ptr0, len0, ptr1, len1, ptr2, len2);
         const mem = getUint32Memory();
         const rustptr = mem[retptr / 4];
         const rustlen = mem[retptr / 4 + 1];
@@ -173,6 +176,7 @@ export function einsumPathAsJson(input_string, flattened_operands_as_string) {
     } finally {
         wasm.__wbindgen_free(ptr0, len0 * 1);
         wasm.__wbindgen_free(ptr1, len1 * 1);
+        wasm.__wbindgen_free(ptr2, len2 * 1);
 
     }
 

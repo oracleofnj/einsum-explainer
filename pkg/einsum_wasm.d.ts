@@ -13,9 +13,10 @@ export function validateAndSizeFromShapesAsStringAsJson(input_string: string, op
 /**
 * @param {string} input_string 
 * @param {string} flattened_operands_as_string 
+* @param {string} optimization_method 
 * @returns {string} 
 */
-export function einsumPathAsJson(input_string: string, flattened_operands_as_string: string): string;
+export function einsumPathAsJson(input_string: string, flattened_operands_as_string: string, optimization_method: string): string;
 /**
 * @param {string} input_string 
 * @param {string} flattened_operands_as_string 
