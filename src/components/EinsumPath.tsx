@@ -1,28 +1,30 @@
 import React from "react";
 import { AppAction } from "../appstate/appState";
-import { slowEinsumAsJson } from "../pkg/einsum_wasm";
-import ComputationOutput from "./ComputationOutput";
+import { einsumPathAsJson } from "../pkg/einsum_wasm";
 import { parseShapeString } from "../utils/parseShapeStrings";
-import ContentsInput from "./ContentsInput";
 import { isErrorMessage } from "../types/einsum_typeguards";
 import { parseDataString } from "../utils/parseDataString";
 import InputOutputRow from "./layout/InputOutputRow";
+import EinsumPathOutput from "./EinsumPathOutput";
+import EinsumPathInput from "./EinsumPathInput";
 
-type ComputationProps = {
+type PathProps = {
   equation: string;
+  optimizationMethod: string;
   visibleSizes: number;
   operandShapes: string[];
   operandContents: string[];
   dispatch: React.Dispatch<AppAction>;
 };
 
-const Computation = ({
+const EinsumPath = ({
   equation,
+  optimizationMethod,
   visibleSizes,
   operandShapes,
   operandContents,
   dispatch
-}: ComputationProps) => {
+}: PathProps) => {
   const shapes = operandShapes.slice(0, visibleSizes);
   const contents = operandContents.slice(0, visibleSizes);
   const operands = [];
@@ -43,20 +45,18 @@ const Computation = ({
   }
 
   const operandsJSON = JSON.stringify(operands);
-  const computationOutputJSON = slowEinsumAsJson(equation, operandsJSON);
+  const einsumPathJSON = einsumPathAsJson(
+    equation,
+    operandsJSON,
+    JSON.stringify(optimizationMethod)
+  );
 
   return (
     <InputOutputRow
-      input={
-        <ContentsInput
-          dispatch={dispatch}
-          visibleSizes={visibleSizes}
-          operandContents={operandContents}
-        />
-      }
-      output={<ComputationOutput computationOutputJSON={computationOutputJSON} />}
+      input={<EinsumPathInput dispatch={dispatch} optimizationMethod={optimizationMethod} />}
+      output={<EinsumPathOutput einsumPathJSON={einsumPathJSON} />}
     />
   );
 };
 
-export default React.memo(Computation);
+export default React.memo(EinsumPath);

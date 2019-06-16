@@ -1,6 +1,9 @@
 import updateEquationDuck, { UpdateEquationAction } from "./ducks/updateEquation";
 import updateShapeDuck, { UpdateShapeAction } from "./ducks/updateShape";
 import updateContentsDuck, { UpdateContentsAction } from "./ducks/updateContents";
+import updateOptimizationMethodDuck, {
+  UpdateOptimizationMethod
+} from "./ducks/updateOptimizationMethod";
 import makeReducer from "./makeReducer";
 import presets, { getState } from "./presets";
 import loadPresetDuck, { LoadPresetAction } from "./ducks/loadPreset";
@@ -33,12 +36,14 @@ export type AppState = {
   equation: string;
   visibleSizes: number;
   operandStates: operandState[];
+  optimizationMethod: string;
 };
 
 const initialState: AppState = getState(presets.matrixMultiplication);
 
 export type AppAction =
   | UpdateEquationAction
+  | UpdateOptimizationMethod
   | UpdateShapeAction
   | UpdateContentsAction
   | LoadPresetAction;
@@ -47,13 +52,15 @@ const appActions = {
   updateEquation: updateEquationDuck.actionCreator,
   updateShape: updateShapeDuck.actionCreator,
   updateContents: updateContentsDuck.actionCreator,
+  updateOptimizationMethod: updateOptimizationMethodDuck.actionCreator,
   loadPreset: loadPresetDuck.actionCreator
 };
 const reducer = makeReducer([
   loadPresetDuck,
   updateEquationDuck,
   updateShapeDuck,
-  updateContentsDuck
+  updateContentsDuck,
+  updateOptimizationMethodDuck
 ]);
 
 export { initialState, reducer, appActions };

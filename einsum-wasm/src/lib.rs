@@ -48,6 +48,7 @@ pub fn validate_and_size_from_shapes_as_string(
 pub fn einsum_path_with_flattened_operands<A: LinalgScalar>(
     input_string: &str,
     flattened_operands: &[&FlattenedOperand<A>],
+    optimization_method: OptimizationMethod,
 ) -> Result<EinsumPath<A>, &'static str> {
     let maybe_operands = flattened_operands
         .iter()
@@ -60,7 +61,7 @@ pub fn einsum_path_with_flattened_operands<A: LinalgScalar>(
             for operand in operands.iter() {
                 operand_refs.push(operand);
             }
-            einsum_path(input_string, &operand_refs, OptimizationMethod::Naive)
+            einsum_path(input_string, &operand_refs, optimization_method)
         }
     }
 }
@@ -88,6 +89,7 @@ pub fn einsum_with_flattened_operands<A: LinalgScalar>(
 pub fn einsum_path_with_flattened_operands_as_string_generic<A>(
     input_string: &str,
     flattened_operands_as_string: &str,
+    optimization_method: OptimizationMethod,
 ) -> Result<EinsumPath<A>, &'static str>
 where
     A: LinalgScalar + serde::de::DeserializeOwned,
@@ -98,7 +100,11 @@ where
         Err(_) => Err("Could not parse flattened operands"),
         Ok(FlattenedOperandList(owned_flattened_operands)) => {
             let flattened_operands: Vec<_> = owned_flattened_operands.iter().map(|x| x).collect();
-            einsum_path_with_flattened_operands(input_string, &flattened_operands)
+            einsum_path_with_flattened_operands(
+                input_string,
+                &flattened_operands,
+                optimization_method,
+            )
         }
     }
 }
@@ -124,10 +130,16 @@ where
 pub fn einsum_path_with_flattened_operands_as_flattened_json_string(
     input_string: &str,
     flattened_operands_as_string: &str,
+    method: &str,
 ) -> Result<EinsumPath<f64>, &'static str> {
+    let optimization_method = match serde_json::from_str::<OptimizationMethod>(method) {
+        Ok(m) => m,
+        Err(_) => return Err("Unknown Method"),
+    };
     einsum_path_with_flattened_operands_as_string_generic::<f64>(
         input_string,
         flattened_operands_as_string,
+        optimization_method,
     )
 }
 
@@ -190,11 +202,13 @@ pub struct EinsumPathResult<T>(Result<EinsumPath<T>, &'static str>);
 pub fn einsum_path_with_flattened_operands_as_json_string_as_json(
     input_string: &str,
     flattened_operands_as_string: &str,
+    optimization_method: &str,
 ) -> String {
     match serde_json::to_string(&EinsumPathResult(
         einsum_path_with_flattened_operands_as_flattened_json_string(
             input_string,
             flattened_operands_as_string,
+            optimization_method,
         ),
     )) {
         Ok(s) => s,

@@ -108,7 +108,8 @@ export function getState({ presetFn }: Preset): AppState {
   return {
     equation,
     visibleSizes,
-    operandStates: [...operandStates, ...Array(256 - visibleSizes).fill(makeOperand([]))]
+    operandStates: [...operandStates, ...Array(256 - visibleSizes).fill(makeOperand([]))],
+    optimizationMethod: "Naive"
   };
 }
 

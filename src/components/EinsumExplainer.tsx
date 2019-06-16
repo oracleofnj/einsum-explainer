@@ -4,6 +4,7 @@ import Equation from "./Equation";
 import Shapes from "./Shapes";
 import Computation from "./Computation";
 import Presets from "./Presets";
+import EinsumPath from "./EinsumPath";
 
 type EinsumExplainerProps = {
   appState: AppState;
@@ -11,7 +12,7 @@ type EinsumExplainerProps = {
 };
 
 const EinsumExplainer = ({ appState, dispatch }: EinsumExplainerProps) => {
-  const { equation, visibleSizes, operandStates } = appState;
+  const { equation, visibleSizes, operandStates, optimizationMethod } = appState;
 
   return (
     <div className="wrap container-fluid">
@@ -27,6 +28,14 @@ const EinsumExplainer = ({ appState, dispatch }: EinsumExplainerProps) => {
         equation={equation}
         dispatch={dispatch}
         visibleSizes={visibleSizes}
+        operandContents={operandStates.map(x => x.contentsStr)}
+        operandShapes={operandStates.map(x => x.shapeStr)}
+      />
+      <EinsumPath
+        equation={equation}
+        dispatch={dispatch}
+        visibleSizes={visibleSizes}
+        optimizationMethod={optimizationMethod}
         operandContents={operandStates.map(x => x.contentsStr)}
         operandShapes={operandStates.map(x => x.shapeStr)}
       />
