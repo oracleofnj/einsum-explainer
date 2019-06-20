@@ -3,6 +3,7 @@ import { isErrorMessage, isEinsumPath } from "../types/einsum_typeguards";
 import parseAndTypecheckJSON from "../utils/parseAndTypecheckJSON";
 import OutputColumn from "./layout/OutputColumn";
 import { zipSteps, OrderAndStep, treeifySteps } from "../utils/showPath";
+import EinsumPathDetails from "./EinsumPathDetails";
 
 type EinsumPathOutputProps = {
   einsumPathJSON: string;
@@ -24,7 +25,7 @@ const EinsumPathOutput = (props: EinsumPathOutputProps) => {
     : {
         Ok: (
           <>
-            {tree && <div>{JSON.stringify(tree, null, 2)}</div>}
+            {tree && <EinsumPathDetails level={0} treeNode={tree} />}
             {/* <div>Einsum Path: {JSON.stringify(zipSteps(einsumPath.Ok))}</div> */}
           </>
         )

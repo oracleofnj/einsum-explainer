@@ -26,7 +26,7 @@ type OrderAndSteps =
       Singleton: SizedContractionAndMethod;
     };
 
-type OrderTreeNode =
+export type OrderTreeNode =
   | {
       sourceType: "Input";
       source: number;
@@ -99,8 +99,11 @@ function treeifyStep(pairs: OrderAndStep[], intermediateNum: number): OrderTree 
   };
 }
 
-export function treeifySteps(pairs: OrderAndStep[]): OrderTree {
-  return treeifyStep(pairs, pairs.length - 1);
+export function treeifySteps(pairs: OrderAndStep[]): OrderTreeNode {
+  return {
+    sourceType: "Result",
+    source: treeifyStep(pairs, pairs.length - 1)
+  };
 }
 
 export function zipSteps(path: EinsumPath): Result<OrderAndSteps> {

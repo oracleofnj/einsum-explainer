@@ -85,8 +85,8 @@ const presets: { [key: string]: Preset } = {
   tensorContraction: {
     description: "Tensor Contraction",
     presetFn: () => ({
-      equation: "pqrs,tuqvr->pstuv",
-      operandStates: [makeOperand([2, 3, 5, 7], 0, 1), makeOperand([11, 13, 3, 17, 5], 0, 10)]
+      equation: "pqrs,tuqr->pstu",
+      operandStates: [makeOperand([2, 6, 7, 3], 0, 1), makeOperand([4, 5, 6, 7], 0, 10)]
     })
   },
   bilinearTransformation: {
