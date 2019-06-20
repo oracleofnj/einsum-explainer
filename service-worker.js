@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.0/workbox-sw.js");
 
 importScripts(
-  "/einsum-explainer/precache-manifest.6825ed65b38936cec931272a0625b14b.js"
+  "/einsum-explainer/precache-manifest.8deb2caeba0c4a082ebafa82653096cd.js"
 );
 
 self.addEventListener('message', (event) => {
