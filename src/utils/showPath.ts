@@ -9,7 +9,8 @@ import {
   SizedContraction,
   Result,
   isOperandNumberInput,
-  OperandNumber
+  OperandNumber,
+  SimplificationMethod
 } from "../types/einsum_typeguards";
 
 export type OrderAndStep = OrderPair & PairStep;
@@ -25,25 +26,44 @@ type OrderAndSteps =
       Singleton: SizedContractionAndMethod;
     };
 
-type orderTreeNode =
+type OrderTreeNode =
   | {
       sourceType: "Input";
       source: number;
+    }
+  | {
+      sourceType: "Simplification";
+      source: Simplification;
     }
   | {
       sourceType: "Result";
       source: OrderTree;
     };
 
+interface Simplification {
+  method: string;
+  einsum_string: string;
+  input: OrderTreeNode;
+}
+
 interface OrderTree {
-  lhs: orderTreeNode;
-  rhs: orderTreeNode;
+  lhs: OrderTreeNode;
+  rhs: OrderTreeNode;
+  method: string;
+  simplified_einsum_string: string;
 }
 
 function treeifyStep(pairs: OrderAndStep[], intermediateNum: number): OrderTree {
-  const { lhs, rhs } = pairs[intermediateNum].operand_nums;
+  const orderAndStep = pairs[intermediateNum];
+  const { lhs, rhs } = orderAndStep.operand_nums;
+  const {
+    method,
+    simplified_einsum_string,
+    lhs_simplification,
+    rhs_simplification
+  } = orderAndStep;
 
-  function resolve(num: OperandNumber): orderTreeNode {
+  function resolve(num: OperandNumber): OrderTreeNode {
     return isOperandNumberInput(num)
       ? {
           sourceType: "Input",
@@ -55,9 +75,27 @@ function treeifyStep(pairs: OrderAndStep[], intermediateNum: number): OrderTree 
         };
   }
 
+  function getSimplification(
+    simplificationMethod: SimplificationMethod | null,
+    num: OperandNumber
+  ): OrderTreeNode {
+    return simplificationMethod !== null
+      ? {
+          sourceType: "Simplification",
+          source: {
+            method: simplificationMethod.method,
+            einsum_string: simplificationMethod.einsum_string,
+            input: resolve(num)
+          }
+        }
+      : resolve(num);
+  }
+
   return {
-    lhs: resolve(lhs),
-    rhs: resolve(rhs)
+    lhs: getSimplification(lhs_simplification, lhs),
+    rhs: getSimplification(rhs_simplification, rhs),
+    method,
+    simplified_einsum_string
   };
 }
 

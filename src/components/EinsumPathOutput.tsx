@@ -24,8 +24,8 @@ const EinsumPathOutput = (props: EinsumPathOutputProps) => {
     : {
         Ok: (
           <>
-            {tree && <div>{JSON.stringify(tree)}</div>}
-            <div>Einsum Path: {JSON.stringify(zipSteps(einsumPath.Ok))}</div>
+            {tree && <div>{JSON.stringify(tree, null, 2)}</div>}
+            {/* <div>Einsum Path: {JSON.stringify(zipSteps(einsumPath.Ok))}</div> */}
           </>
         )
       };
